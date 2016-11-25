@@ -1,0 +1,9 @@
+package google;
+
+message Message {
+	required int32 server_id = 1;
+
+	required int32 player_id = 2;
+
+	optional string pdata = 3;
+}
