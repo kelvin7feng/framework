@@ -84,6 +84,9 @@
 		B62BF8091DE837560080C6A2 /* libhiredis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8061DE837560080C6A2 /* libhiredis.a */; };
 		B62BF80A1DE837560080C6A2 /* libmysqlclient.18.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8071DE837560080C6A2 /* libmysqlclient.18.dylib */; };
 		B62BF80B1DE837560080C6A2 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8081DE837560080C6A2 /* libmysqlclient.a */; };
+		B62BF80F1DE978300080C6A2 /* libhiredis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8061DE837560080C6A2 /* libhiredis.a */; };
+		B62BF8101DE978300080C6A2 /* libmysqlclient.18.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8071DE837560080C6A2 /* libmysqlclient.18.dylib */; };
+		B62BF8111DE978300080C6A2 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8081DE837560080C6A2 /* libmysqlclient.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -192,7 +195,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B62BF80F1DE978300080C6A2 /* libhiredis.a in Frameworks */,
 				B607886B1DAE5DAA0089A30C /* liblua.a in Frameworks */,
+				B62BF8101DE978300080C6A2 /* libmysqlclient.18.dylib in Frameworks */,
+				B62BF8111DE978300080C6A2 /* libmysqlclient.a in Frameworks */,
 				B6091D301DABE00600ABF7D0 /* libprotobuf.a in Frameworks */,
 				B6091D311DABE00600ABF7D0 /* libuv.a in Frameworks */,
 			);
@@ -678,6 +684,8 @@
 					"$(SRCROOT)/lua-5.3.3/src/",
 					"$(SRCROOT)/rapidjson/",
 					"$(SRCROOT)/libuv/include/",
+					"$(SRCROOT)/mysql_connector/include/",
+					"$(SRCROOT)/hiredis/",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib",
@@ -695,6 +703,8 @@
 					"$(SRCROOT)/lua-5.3.3/src/",
 					"$(SRCROOT)/rapidjson/",
 					"$(SRCROOT)/libuv/include/",
+					"$(SRCROOT)/mysql_connector/include/",
+					"$(SRCROOT)/hiredis/",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib",

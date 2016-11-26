@@ -35,12 +35,6 @@ int main() {
     
     const Value& server_config = json_doc["listen"];
     
-    assert(server_config.HasMember("ip"));
-    assert(server_config["ip"].IsString());
-    
-    assert(server_config.HasMember("port"));
-    assert(server_config["port"].IsInt());
-    
     string sz_ip = server_config["ip"].GetString();
     int port = server_config["port"].GetInt();
     

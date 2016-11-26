@@ -27,8 +27,6 @@
 #include "tcp_client.hpp"
 #include "tcp_base_server.hpp"
 
-#endif /* game_logic_server_hpp */
-
 using namespace std;
 using namespace google;
 
@@ -44,23 +42,27 @@ public:
     
     static GameLogicServer* get_instance();
     
-    virtual int init(uv_loop_t* loop, const char* ip, int port);
+    //初始化
+    int init(uv_loop_t* loop, const char* ip, int port);
     
-    virtual void on_new_connection(uv_stream_t *server, int status);
+    //监听新连接
+    void on_new_connection(uv_stream_t *server, int status);
     
-    virtual void on_msg_recv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf);
+    //接收数据
+    void on_msg_recv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf);
     
     //回写数据
-    virtual void write(uv_stream_t* client, string msg);
+    void write(uv_stream_t* client, string msg);
     
     //回写数据的回调
-    virtual void on_write(uv_write_t* req, int status);
+    void on_write(uv_write_t* req, int status);
     
+    //测试吞吐量
     void test_throughput(uint64_t repeat);
     
     uv_write_t m_write_req;
     
-protected:
+private:
     
     session_map_t open_sessions;
     
@@ -69,3 +71,5 @@ protected:
     int totol_request;
     
 };
+
+#endif /* game_logic_server_hpp */

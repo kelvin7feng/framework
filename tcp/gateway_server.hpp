@@ -23,8 +23,6 @@
 
 #include "google.pb.h"
 
-#endif /* gateway_server_hpp */
-
 using namespace std;
 using namespace google;
 
@@ -40,13 +38,19 @@ public:
     
     static GatewayServer* get_instance();
     
-    virtual int init(uv_loop_t* loop, const char* ip, int port);
+    //初始化
+    int init(uv_loop_t* loop, const char* ip, int port);
     
-    virtual void on_new_connection(uv_stream_t *server, int status);
+    //监听新建连接
+    void on_new_connection(uv_stream_t *server, int status);
     
-    virtual void on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
+    //监听接收数据
+    void on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
     
 protected:
+    
     session_map_t open_sessions;
     
 };
+
+#endif /* gateway_server_hpp */

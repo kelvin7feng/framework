@@ -8,8 +8,6 @@
 
 #include "gateway_server.hpp"
 
-#define DEFAULT_BACKLOG 1000
-
 GatewayServer::GatewayServer()
 {
     
@@ -17,8 +15,7 @@ GatewayServer::GatewayServer()
 
 GatewayServer::~GatewayServer()
 {
-    uv_loop_close(m_loop);
-    cout << "Server Terminated" << endl;
+    cout << "Gateway Server Terminated" << endl;
 }
 
 GatewayServer* GatewayServer::get_instance()
@@ -29,17 +26,17 @@ GatewayServer* GatewayServer::get_instance()
 
 int GatewayServer::init(uv_loop_t* loop, const char* ip, int port)
 {
-    m_ip = ip;
-    m_port = port;
-    m_loop = loop;
+    SetIp(ip);
+    SetPort(port);
+    SetLoop(loop);
     
     uv_tcp_init(loop, &m_server);
     
-    uv_ip4_addr(ip, m_port, &m_addr);
+    uv_ip4_addr(ip, port, &m_addr);
     
     uv_tcp_bind(&m_server, (const struct sockaddr*)&m_addr, 0);
     
-    int r = uv_listen((uv_stream_t*) &m_server, DEFAULT_BACKLOG,
+    int r = uv_listen((uv_stream_t*) &m_server, GetDefaultBackLog(),
                       [](uv_stream_t* server, int status)
                       {
                           GatewayServer::get_instance()->on_new_connection(server, status);
@@ -50,7 +47,7 @@ int GatewayServer::init(uv_loop_t* loop, const char* ip, int port)
         return 0;
     }
     
-    cout << "server listen: " << m_ip << ":" << m_port << endl;
+    cout << "server listen: " << ip << ":" << port << endl;
     return 1;
 }
 

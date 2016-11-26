@@ -15,7 +15,6 @@
 #include <fstream>
 #include <map>
 #include "lua.hpp"
-#endif /* klua_hpp */
 
 using namespace std;
 
@@ -43,3 +42,5 @@ private:
     lua_State* m_pLuaState;
     map<int, string> server_path;
 };
+
+#endif /* klua_hpp */

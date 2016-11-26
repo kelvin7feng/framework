@@ -16,8 +16,6 @@
 #include <unistd.h>
 #include <iostream>
 
-#endif /* tcp_client_hpp */
-
 using namespace std;
 
 class TCPClient{
@@ -60,3 +58,5 @@ private:
     
     uv_write_t m_write_req;
 };
+
+#endif /* tcp_client_hpp */

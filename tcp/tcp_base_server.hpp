@@ -19,8 +19,6 @@
 
 #include "tcp_session.hpp"
 
-#endif /* tcp_base_server_hpp */
-
 using namespace std;
 
 typedef std::map<uv_stream_t*, TCPSession> session_map_t;
@@ -47,11 +45,19 @@ public:
     
     virtual void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
     
+    virtual void SetPort(int port);
+    
+    virtual int GetPort();
+    
+    virtual void SetIp(const char* ip);
+    
+    virtual const char* GetIp();
+    
+    virtual void SetLoop(uv_loop_t* loop);
+    
+    virtual uv_loop_t* GetLoop();
+    
 protected:
-    
-    int m_port;
-    
-    const char *m_ip;
     
     uv_loop_t *m_loop;
     
@@ -63,5 +69,11 @@ protected:
     
 private:
     
+    int m_port;
+    
+    const char *m_ip;
+    
     int default_backlog = 1000;
 };
+
+#endif /* tcp_base_server_hpp */

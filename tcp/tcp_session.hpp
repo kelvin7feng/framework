@@ -18,8 +18,6 @@
 #include <queue>
 #include <memory>
 
-#endif /* tcp_session_hpp */
-
 class TCPSession
 {
 public:
@@ -31,3 +29,5 @@ public:
     std::shared_ptr<uv_timer_t> activity_timer;
     
 };
+
+#endif /* tcp_session_hpp */
