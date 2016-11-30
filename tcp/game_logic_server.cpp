@@ -10,7 +10,7 @@
 
 GameLogicServer::GameLogicServer()
 {
-    lua_engine.InitState(CLuaEngine::SERVER_TYPE::LOGIC);
+    lua_engine.InitState(LuaEngine::SERVER_TYPE::LOGIC);
 }
 
 GameLogicServer::~GameLogicServer()

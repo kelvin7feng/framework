@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B60788701DAE5E240089A30C /* klua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B607886E1DAE5E240089A30C /* klua.cpp */; };
 		B60788741DAE60390089A30C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091DBC1DAD15AE00ABF7D0 /* main.cpp */; };
-		B60788751DAE67110089A30C /* klua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B607886E1DAE5E240089A30C /* klua.cpp */; };
-		B60788761DAE67120089A30C /* klua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B607886E1DAE5E240089A30C /* klua.cpp */; };
 		B6091CC91DABD1B100ABF7D0 /* google.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = B6091CC61DABD1B100ABF7D0 /* google.pb.cc */; };
 		B6091CD21DABD1C000ABF7D0 /* gateway_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091CCA1DABD1C000ABF7D0 /* gateway_server.cpp */; };
 		B6091CD31DABD1C000ABF7D0 /* tcp_base_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091CCC1DABD1C000ABF7D0 /* tcp_base_server.cpp */; };
@@ -30,6 +27,8 @@
 		B6091DAF1DAD147300ABF7D0 /* tcp_base_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091CCC1DABD1C000ABF7D0 /* tcp_base_server.cpp */; };
 		B6091DB01DAD147300ABF7D0 /* tcp_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091CCE1DABD1C000ABF7D0 /* tcp_client.cpp */; };
 		B6091DBB1DAD14A100ABF7D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091DBA1DAD14A100ABF7D0 /* main.cpp */; };
+		B628D5811DEE734E00D4C87C /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
+		B628D59F1DEEBB8E00D4C87C /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
 		B62BF7821DE81A740080C6A2 /* file_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF77F1DE81A0F0080C6A2 /* file_util.cpp */; };
 		B62BF7831DE81A740080C6A2 /* file_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF77F1DE81A0F0080C6A2 /* file_util.cpp */; };
 		B62BF7841DE81A750080C6A2 /* file_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF77F1DE81A0F0080C6A2 /* file_util.cpp */; };
@@ -73,17 +72,25 @@
 		B62BF8041DE82D160080C6A2 /* UTFail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF7D71DE82D160080C6A2 /* UTFail.cpp */; };
 		B62BF8051DE82D160080C6A2 /* UTFail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF7D71DE82D160080C6A2 /* UTFail.cpp */; };
 		B62BF8181DE982730080C6A2 /* libhiredis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8121DE982730080C6A2 /* libhiredis.a */; };
-		B62BF8191DE982730080C6A2 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
 		B62BF81A1DE982730080C6A2 /* libmysqlclient.18.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8141DE982730080C6A2 /* libmysqlclient.18.dylib */; };
 		B62BF81B1DE982730080C6A2 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8151DE982730080C6A2 /* libmysqlclient.a */; };
 		B62BF81C1DE982730080C6A2 /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8161DE982730080C6A2 /* libprotobuf.a */; };
 		B62BF81D1DE982730080C6A2 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8171DE982730080C6A2 /* libuv.a */; };
 		B62BF81F1DE983230080C6A2 /* libhiredis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8121DE982730080C6A2 /* libhiredis.a */; };
-		B62BF8201DE983230080C6A2 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
 		B62BF8211DE983230080C6A2 /* libmysqlclient.18.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8141DE982730080C6A2 /* libmysqlclient.18.dylib */; };
 		B62BF8221DE983230080C6A2 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8151DE982730080C6A2 /* libmysqlclient.a */; };
 		B62BF8231DE983230080C6A2 /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8161DE982730080C6A2 /* libprotobuf.a */; };
 		B62BF8241DE983230080C6A2 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8171DE982730080C6A2 /* libuv.a */; };
+		B667A8AF1DEED3FA00E1B497 /* libtolua++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B667A8AE1DEED3FA00E1B497 /* libtolua++.a */; };
+		B667A8B41DEED75100E1B497 /* lua_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8B01DEED75100E1B497 /* lua_player.cpp */; };
+		B667A8B51DEED75100E1B497 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8B21DEED75100E1B497 /* player.cpp */; };
+		B667A8B61DEED75400E1B497 /* lua_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8B01DEED75100E1B497 /* lua_player.cpp */; };
+		B667A8B71DEED75500E1B497 /* lua_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8B01DEED75100E1B497 /* lua_player.cpp */; };
+		B667A8B81DEED75700E1B497 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8B21DEED75100E1B497 /* player.cpp */; };
+		B667A8B91DEED75800E1B497 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8B21DEED75100E1B497 /* player.cpp */; };
+		B667A8BC1DEED7D100E1B497 /* lua_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */; };
+		B667A8BD1DEED7D400E1B497 /* lua_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */; };
+		B667A8BE1DEED7D400E1B497 /* lua_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -117,8 +124,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B607886E1DAE5E240089A30C /* klua.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = klua.cpp; path = common/klua.cpp; sourceTree = "<group>"; };
-		B607886F1DAE5E240089A30C /* klua.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = klua.hpp; path = common/klua.hpp; sourceTree = "<group>"; };
 		B60788711DAE5F380089A30C /* main.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.lua; path = script/main.lua; sourceTree = "<group>"; };
 		B6091CB71DABD09E00ABF7D0 /* server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = server; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6091CC61DABD1B100ABF7D0 /* google.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = google.pb.cc; path = protobuf/google.pb.cc; sourceTree = "<group>"; };
@@ -173,6 +178,13 @@
 		B62BF8151DE982730080C6A2 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = third_party/lib/libmysqlclient.a; sourceTree = "<group>"; };
 		B62BF8161DE982730080C6A2 /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf.a; path = third_party/lib/libprotobuf.a; sourceTree = "<group>"; };
 		B62BF8171DE982730080C6A2 /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = third_party/lib/libuv.a; sourceTree = "<group>"; };
+		B667A8AE1DEED3FA00E1B497 /* libtolua++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libtolua++.a"; path = "third_party/lib/libtolua++.a"; sourceTree = "<group>"; };
+		B667A8B01DEED75100E1B497 /* lua_player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_player.cpp; path = class/lua_player.cpp; sourceTree = "<group>"; };
+		B667A8B11DEED75100E1B497 /* lua_player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_player.h; path = class/lua_player.h; sourceTree = "<group>"; };
+		B667A8B21DEED75100E1B497 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = player.cpp; path = class/player.cpp; sourceTree = "<group>"; };
+		B667A8B31DEED75100E1B497 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = player.h; path = class/player.h; sourceTree = "<group>"; };
+		B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_engine.cpp; path = vm/lua_engine.cpp; sourceTree = "<group>"; };
+		B667A8BB1DEED7D100E1B497 /* lua_engine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = lua_engine.hpp; path = vm/lua_engine.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,8 +199,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B628D59F1DEEBB8E00D4C87C /* liblua.a in Frameworks */,
 				B62BF81F1DE983230080C6A2 /* libhiredis.a in Frameworks */,
-				B62BF8201DE983230080C6A2 /* liblua.a in Frameworks */,
 				B62BF8211DE983230080C6A2 /* libmysqlclient.18.dylib in Frameworks */,
 				B62BF8221DE983230080C6A2 /* libmysqlclient.a in Frameworks */,
 				B62BF8231DE983230080C6A2 /* libprotobuf.a in Frameworks */,
@@ -200,8 +212,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B667A8AF1DEED3FA00E1B497 /* libtolua++.a in Frameworks */,
+				B628D5811DEE734E00D4C87C /* liblua.a in Frameworks */,
 				B62BF8181DE982730080C6A2 /* libhiredis.a in Frameworks */,
-				B62BF8191DE982730080C6A2 /* liblua.a in Frameworks */,
 				B62BF81A1DE982730080C6A2 /* libmysqlclient.18.dylib in Frameworks */,
 				B62BF81B1DE982730080C6A2 /* libmysqlclient.a in Frameworks */,
 				B62BF81C1DE982730080C6A2 /* libprotobuf.a in Frameworks */,
@@ -220,22 +233,14 @@
 			name = script;
 			sourceTree = "<group>";
 		};
-		B607886D1DAE5E160089A30C /* common */ = {
-			isa = PBXGroup;
-			children = (
-				B607886E1DAE5E240089A30C /* klua.cpp */,
-				B607886F1DAE5E240089A30C /* klua.hpp */,
-			);
-			name = common;
-			sourceTree = "<group>";
-		};
 		B6091CAE1DABD09E00ABF7D0 = {
 			isa = PBXGroup;
 			children = (
+				B628D5931DEEBA8000D4C87C /* class */,
+				B628D57C1DEE71AD00D4C87C /* vm */,
 				B62BF78A1DE82C8A0080C6A2 /* redis */,
 				B62BF7861DE82C750080C6A2 /* manager */,
 				B62BF77E1DE81A030080C6A2 /* util */,
-				B607886D1DAE5E160089A30C /* common */,
 				B60788681DAE5D660089A30C /* script */,
 				B6091DB91DAD148200ABF7D0 /* logic */,
 				B6091D371DABE02A00ABF7D0 /* gateway */,
@@ -269,6 +274,7 @@
 		B6091CC21DABD15000ABF7D0 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				B667A8AE1DEED3FA00E1B497 /* libtolua++.a */,
 				B62BF8121DE982730080C6A2 /* libhiredis.a */,
 				B62BF8131DE982730080C6A2 /* liblua.a */,
 				B62BF8141DE982730080C6A2 /* libmysqlclient.18.dylib */,
@@ -320,6 +326,26 @@
 				B6091DBA1DAD14A100ABF7D0 /* main.cpp */,
 			);
 			name = logic;
+			sourceTree = "<group>";
+		};
+		B628D57C1DEE71AD00D4C87C /* vm */ = {
+			isa = PBXGroup;
+			children = (
+				B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */,
+				B667A8BB1DEED7D100E1B497 /* lua_engine.hpp */,
+			);
+			name = vm;
+			sourceTree = "<group>";
+		};
+		B628D5931DEEBA8000D4C87C /* class */ = {
+			isa = PBXGroup;
+			children = (
+				B667A8B01DEED75100E1B497 /* lua_player.cpp */,
+				B667A8B11DEED75100E1B497 /* lua_player.h */,
+				B667A8B21DEED75100E1B497 /* player.cpp */,
+				B667A8B31DEED75100E1B497 /* player.h */,
+			);
+			name = class;
 			sourceTree = "<group>";
 		};
 		B62BF77E1DE81A030080C6A2 /* util */ = {
@@ -473,7 +499,9 @@
 				B62BF7D91DE82D160080C6A2 /* AdhocParameter.cpp in Sources */,
 				B6091CD51DABD1C000ABF7D0 /* tcp_session.cpp in Sources */,
 				B62BF7891DE82C850080C6A2 /* data_manager.cpp in Sources */,
+				B667A8B41DEED75100E1B497 /* lua_player.cpp in Sources */,
 				B62BF7FD1DE82D160080C6A2 /* Statement.cpp in Sources */,
+				B667A8B51DEED75100E1B497 /* player.cpp in Sources */,
 				B6091CC91DABD1B100ABF7D0 /* google.pb.cc in Sources */,
 				B6091D231DABDD8E00ABF7D0 /* game_logic_server.cpp in Sources */,
 				B62BF7DF1DE82D160080C6A2 /* Binary.cpp in Sources */,
@@ -481,10 +509,10 @@
 				B62BF78D1DE82C9E0080C6A2 /* redis_client.cpp in Sources */,
 				B6091CD21DABD1C000ABF7D0 /* gateway_server.cpp in Sources */,
 				B62BF7DC1DE82D160080C6A2 /* AdhocStatement.cpp in Sources */,
+				B667A8BC1DEED7D100E1B497 /* lua_engine.cpp in Sources */,
 				B62BF7E51DE82D160080C6A2 /* DatabaseException.cpp in Sources */,
 				B6091CD31DABD1C000ABF7D0 /* tcp_base_server.cpp in Sources */,
 				B62BF7F11DE82D160080C6A2 /* mysql_client.cpp in Sources */,
-				B60788701DAE5E240089A30C /* klua.cpp in Sources */,
 				B62BF7F41DE82D160080C6A2 /* ParamBuffer.cpp in Sources */,
 				B62BF7821DE81A740080C6A2 /* file_util.cpp in Sources */,
 				B62BF7E81DE82D160080C6A2 /* IStatement.cpp in Sources */,
@@ -505,20 +533,22 @@
 				B6091D2B1DABE00600ABF7D0 /* game_logic_server.cpp in Sources */,
 				B62BF7F51DE82D160080C6A2 /* ParamBuffer.cpp in Sources */,
 				B62BF7DD1DE82D160080C6A2 /* AdhocStatement.cpp in Sources */,
+				B667A8B81DEED75700E1B497 /* player.cpp in Sources */,
 				B6091D2C1DABE00600ABF7D0 /* gateway_server.cpp in Sources */,
 				B62BF7FB1DE82D160080C6A2 /* README.md in Sources */,
 				B62BF7EC1DE82D160080C6A2 /* Julian.cpp in Sources */,
 				B62BF7B91DE82CEC0080C6A2 /* redis_client.cpp in Sources */,
 				B60788741DAE60390089A30C /* main.cpp in Sources */,
 				B6091D2D1DABE00600ABF7D0 /* tcp_base_server.cpp in Sources */,
+				B667A8B61DEED75400E1B497 /* lua_player.cpp in Sources */,
 				B62BF8041DE82D160080C6A2 /* UTFail.cpp in Sources */,
 				B62BF7E61DE82D160080C6A2 /* DatabaseException.cpp in Sources */,
 				B62BF7831DE81A740080C6A2 /* file_util.cpp in Sources */,
 				B62BF7F21DE82D160080C6A2 /* mysql_client.cpp in Sources */,
-				B60788751DAE67110089A30C /* klua.cpp in Sources */,
 				B6091D2E1DABE00600ABF7D0 /* tcp_client.cpp in Sources */,
 				B62BF7BB1DE82CF10080C6A2 /* data_manager.cpp in Sources */,
 				B62BF7DA1DE82D160080C6A2 /* AdhocParameter.cpp in Sources */,
+				B667A8BD1DEED7D400E1B497 /* lua_engine.cpp in Sources */,
 				B62BF7E91DE82D160080C6A2 /* IStatement.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -534,20 +564,22 @@
 				B6091DAC1DAD147300ABF7D0 /* game_logic_server.cpp in Sources */,
 				B62BF7F61DE82D160080C6A2 /* ParamBuffer.cpp in Sources */,
 				B62BF7DE1DE82D160080C6A2 /* AdhocStatement.cpp in Sources */,
+				B667A8B91DEED75800E1B497 /* player.cpp in Sources */,
 				B6091DAD1DAD147300ABF7D0 /* gateway_server.cpp in Sources */,
 				B62BF7FC1DE82D160080C6A2 /* README.md in Sources */,
 				B62BF7ED1DE82D160080C6A2 /* Julian.cpp in Sources */,
 				B62BF7BA1DE82CED0080C6A2 /* redis_client.cpp in Sources */,
 				B6091DAF1DAD147300ABF7D0 /* tcp_base_server.cpp in Sources */,
 				B6091DBB1DAD14A100ABF7D0 /* main.cpp in Sources */,
+				B667A8B71DEED75500E1B497 /* lua_player.cpp in Sources */,
 				B62BF8051DE82D160080C6A2 /* UTFail.cpp in Sources */,
 				B62BF7E71DE82D160080C6A2 /* DatabaseException.cpp in Sources */,
 				B62BF7841DE81A750080C6A2 /* file_util.cpp in Sources */,
 				B62BF7F31DE82D160080C6A2 /* mysql_client.cpp in Sources */,
-				B60788761DAE67120089A30C /* klua.cpp in Sources */,
 				B6091DB01DAD147300ABF7D0 /* tcp_client.cpp in Sources */,
 				B62BF7BC1DE82CF10080C6A2 /* data_manager.cpp in Sources */,
 				B62BF7DB1DE82D160080C6A2 /* AdhocParameter.cpp in Sources */,
+				B667A8BE1DEED7D400E1B497 /* lua_engine.cpp in Sources */,
 				B62BF7EA1DE82D160080C6A2 /* IStatement.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,16 +703,18 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/third_party/",
-					"$(SRCROOT)/third_party/lua-5.3.3/src/",
+					"$(SRCROOT)/third_party/lua-5.1.5/src/",
 					"$(SRCROOT)/third_party/rapidjson/",
 					"$(SRCROOT)/third_party/libuv/include/",
 					"$(SRCROOT)/third_party/mysql_connector/include/",
 					"$(SRCROOT)/third_party/hiredis/",
+					"$(SRCROOT)/third_party/tolua++/",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib",
 					"$(PROJECT_DIR)/lib",
 					"$(PROJECT_DIR)/third_party/lib",
+					"$(PROJECT_DIR)/third_party/tolua++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -691,16 +725,18 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/third_party/",
-					"$(SRCROOT)/third_party/lua-5.3.3/src/",
+					"$(SRCROOT)/third_party/lua-5.1.5/src/",
 					"$(SRCROOT)/third_party/rapidjson/",
 					"$(SRCROOT)/third_party/libuv/include/",
 					"$(SRCROOT)/third_party/mysql_connector/include/",
 					"$(SRCROOT)/third_party/hiredis/",
+					"$(SRCROOT)/third_party/tolua++/",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib",
 					"$(PROJECT_DIR)/lib",
 					"$(PROJECT_DIR)/third_party/lib",
+					"$(PROJECT_DIR)/third_party/tolua++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -711,17 +747,14 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/third_party/",
-					"$(SRCROOT)/third_party/lua-5.3.3/src/",
+					"$(SRCROOT)/third_party/lua-5.1.5/src/",
 					"$(SRCROOT)/third_party/rapidjson/",
 					"$(SRCROOT)/third_party/libuv/include/",
 					"$(SRCROOT)/third_party/mysql_connector/include/",
 					"$(SRCROOT)/third_party/hiredis/",
+					"$(SRCROOT)/third_party/tolua++/",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/lib",
-					"$(PROJECT_DIR)/lib",
-					"$(PROJECT_DIR)/third_party/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/third_party/lib";
 				OTHER_LDFLAGS = (
 					"-L$(SRCROOT)/mysql_connector/lib",
 					"-lmysqlclient",
@@ -737,17 +770,14 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/third_party/",
-					"$(SRCROOT)/third_party/lua-5.3.3/src/",
+					"$(SRCROOT)/third_party/lua-5.1.5/src/",
 					"$(SRCROOT)/third_party/rapidjson/",
 					"$(SRCROOT)/third_party/libuv/include/",
 					"$(SRCROOT)/third_party/mysql_connector/include/",
 					"$(SRCROOT)/third_party/hiredis/",
+					"$(SRCROOT)/third_party/tolua++/",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/lib",
-					"$(PROJECT_DIR)/lib",
-					"$(PROJECT_DIR)/third_party/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/third_party/lib";
 				OTHER_LDFLAGS = (
 					"-L$(SRCROOT)/mysql_connector/lib",
 					"-lmysqlclient",

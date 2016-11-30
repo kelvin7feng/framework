@@ -7,4 +7,6 @@ require("common.log")
 require("common.json")
 require("module.protocol")
 
-LOG_INFO("load logic script script succeed...")
+local player = Player:new();
+player:Run();
+LOG_INFO("load logic script succeed...")

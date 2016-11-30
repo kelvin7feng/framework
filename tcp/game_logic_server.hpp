@@ -23,7 +23,7 @@
 
 #include "google.pb.h"
 
-#include "klua.hpp"
+#include "lua_engine.hpp"
 #include "tcp_client.hpp"
 #include "tcp_base_server.hpp"
 
@@ -66,7 +66,7 @@ private:
     
     session_map_t open_sessions;
     
-    CLuaEngine lua_engine;
+    LuaEngine lua_engine;
     
     int totol_request;
     

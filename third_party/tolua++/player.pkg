@@ -1,0 +1,9 @@
+$#include "player.h"
+
+class Player
+{
+public:
+	Player();
+	~Player();
+	void Run();
+}
