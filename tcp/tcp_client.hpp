@@ -28,19 +28,31 @@ public:
     
     TCPClient(const TCPClient& TCPClient);
     
-    static TCPClient* get_instance();
+    static TCPClient* GetInstance();
     
-    int init(uv_loop_t* loop, const char* ip, int port);
+    int Init(uv_loop_t* loop, const char* ip, int port);
     
     void write(string msg);
     
+    void SetPort(int port);
+    
+    int GetPort();
+    
+    void SetIp(const char* ip);
+    
+    const char* GetIp();
+    
+    void SetLoop(uv_loop_t* loop);
+    
+    uv_loop_t* GetLoop();
+    
 protected:
     
-    void on_write(uv_write_t *req, int status);
+    void OnWrite(uv_write_t *req, int status);
     
-    void on_connect(uv_connect_t *req, int status);
+    void OnConnect(uv_connect_t *req, int status);
     
-    static void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
+    static void AllocBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
     
 private:
     

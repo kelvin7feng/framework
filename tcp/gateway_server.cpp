@@ -18,13 +18,13 @@ GatewayServer::~GatewayServer()
     cout << "Gateway Server Terminated" << endl;
 }
 
-GatewayServer* GatewayServer::get_instance()
+GatewayServer* GatewayServer::GetInstance()
 {
     static GatewayServer server;
     return &server;
 }
 
-int GatewayServer::init(uv_loop_t* loop, const char* ip, int port)
+int GatewayServer::Init(uv_loop_t* loop, const char* ip, int port)
 {
     SetIp(ip);
     SetPort(port);
@@ -39,19 +39,20 @@ int GatewayServer::init(uv_loop_t* loop, const char* ip, int port)
     int r = uv_listen((uv_stream_t*) &m_server, GetDefaultBackLog(),
                       [](uv_stream_t* server, int status)
                       {
-                          GatewayServer::get_instance()->on_new_connection(server, status);
+                          GatewayServer::GetInstance()->OnNewConnection(server, status);
                       });
+
     
     if (r) {
-        fprintf(stderr, "Listen error %s\n", uv_strerror(r));
-        return 0;
+        fprintf(stderr, "Listen error %s: %s:%d\n", uv_strerror(r), ip, port);
+        exit(1);
     }
     
-    cout << "server listen: " << ip << ":" << port << endl;
+    cout << "gateway server listen " << ip << ":" << port << " succeed"<< endl;
     return 1;
 }
 
-void GatewayServer::on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf) {
+void GatewayServer::OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf) {
     
     auto connection_pos = open_sessions.find(client);
     if (connection_pos != open_sessions.end())
@@ -66,7 +67,7 @@ void GatewayServer::on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf
             Message msg;
             msg.ParseFromString(str);
             
-            TCPClient* game_logic_server = TCPClient::get_instance();
+            TCPClient* game_logic_server = TCPClient::GetInstance();
             game_logic_server->write(str);
         }
         
@@ -75,7 +76,7 @@ void GatewayServer::on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf
     
 }
 
-void GatewayServer::on_new_connection(uv_stream_t *server, int status)
+void GatewayServer::OnNewConnection(uv_stream_t *server, int status)
 {
     if (status < 0) {
         fprintf(stderr, "New connection error %s\n", uv_strerror(status));
@@ -85,17 +86,17 @@ void GatewayServer::on_new_connection(uv_stream_t *server, int status)
     TCPSession new_session;
     new_session.connection = std::make_shared<uv_tcp_t>();
     
-    uv_tcp_init(m_loop, new_session.connection.get());
+    uv_tcp_init(GetLoop(), new_session.connection.get());
     if (uv_accept(server, (uv_stream_t*)new_session.connection.get()) == 0) {
         
         uv_read_start((uv_stream_t*)new_session.connection.get(),
                       [](uv_handle_t* stream, size_t nread, uv_buf_t *buf)
                       {
-                          GatewayServer::get_instance()->alloc_buffer(stream, nread, buf);
+                          GatewayServer::GetInstance()->AllocBuffer(stream, nread, buf);
                       },
                       [](uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf)
                       {
-                          GatewayServer::get_instance()->on_msg_recv(stream, nread, buf);
+                          GatewayServer::GetInstance()->OnMsgRecv(stream, nread, buf);
                       });
         
         uv_stream_t* key = (uv_stream_t*)new_session.connection.get();

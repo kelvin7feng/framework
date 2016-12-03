@@ -40,22 +40,22 @@ public:
     
     GameLogicServer(const GameLogicServer& GameLogicServer);
     
-    static GameLogicServer* get_instance();
+    static GameLogicServer* GetInstance();
     
     //初始化
-    int init(uv_loop_t* loop, const char* ip, int port);
+    int Init(uv_loop_t* loop, const char* ip, int port);
     
     //监听新连接
-    void on_new_connection(uv_stream_t *server, int status);
+    void OnNewConnection(uv_stream_t *server, int status);
     
     //接收数据
-    void on_msg_recv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf);
+    void OnMsgRecv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf);
     
     //回写数据
     void write(uv_stream_t* client, string msg);
     
     //回写数据的回调
-    void on_write(uv_write_t* req, int status);
+    void OnWrite(uv_write_t* req, int status);
     
     //测试吞吐量
     void test_throughput(uint64_t repeat);

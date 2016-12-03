@@ -13,45 +13,53 @@ TCPClient::TCPClient()
     
 }
 
-TCPClient* TCPClient::get_instance()
+TCPClient* TCPClient::GetInstance()
 {
     static TCPClient client;
     return &client;
 }
 
-int TCPClient::init(uv_loop_t* loop, const char* ip, int port)
+int TCPClient::Init(uv_loop_t* loop, const char* ip, int port)
 {
-    m_ip = ip;
-    m_port = port;
+    SetIp(ip);
+    SetPort(port);
+    SetLoop(loop);
     
-    m_loop = loop;
-    
-    uv_tcp_init(m_loop, &m_client);
-    uv_ip4_addr(m_ip, m_port, &m_dest);
-    uv_tcp_connect(&m_connect_req, &m_client, (const struct sockaddr*)&m_dest,
+    uv_tcp_init(loop, &m_client);
+    uv_ip4_addr(ip, port, &m_dest);
+    int ret = uv_tcp_connect(&m_connect_req, &m_client, (const struct sockaddr*)&m_dest,
                    [](uv_connect_t *req, int status)
                    {
-                       TCPClient::get_instance()->on_connect(req, status);
+                       TCPClient::GetInstance()->OnConnect(req, status);
                    });
     
-    cout << "client connect to " << m_ip << ":" << m_port << endl;
+    if(ret < 0)
+    {
+        cout << "client connect error: " << ip << ":" << port << endl;
+        exit(1);
+    }
     
-    return uv_run(m_loop, UV_RUN_DEFAULT);
+    if(ret == 0)
+    {
+        cout << "client connect to " << ip << ":" << port << " succeed"<< endl;
+    }
+    
+    return uv_run(loop, UV_RUN_DEFAULT);
 }
 
 TCPClient::TCPClient(const TCPClient& TCPClient){
     
 }
 
-void TCPClient::alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf) {
+void TCPClient::AllocBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf) {
     buf->base = (char*) malloc(suggested_size);
     buf->len = suggested_size;
 }
 
-void TCPClient::on_write(uv_write_t *req, int status){
+void TCPClient::OnWrite(uv_write_t *req, int status){
     
-    if (status == -1) {
-        fprintf(stderr, "error on_write");
+    if (status < 0) {
+        cout << "TCP Client write error: " << uv_strerror(status) << endl;
         return;
     }
     
@@ -60,11 +68,11 @@ void TCPClient::on_write(uv_write_t *req, int status){
     }
 }
 
-void TCPClient::on_connect(uv_connect_t *req, int status) {
+void TCPClient::OnConnect(uv_connect_t *req, int status) {
     
-    if (status == -1) {
-        fprintf(stderr, "error on_write_end");
-        return;
+    if (status < 0) {
+        cout << "TCP Client connect error: " << uv_strerror(status) << endl;
+        exit(1);
     }
  
 }
@@ -81,10 +89,16 @@ void TCPClient::write(string message){
     
     int buf_count = 1;
     
+    if(m_write_req.error < 0)
+    {
+        cout << "m_write_req error:" << m_write_req.error << endl;
+        cout << "try to reconnect..." << endl;
+    }
+    
     int ret = uv_write(&m_write_req, m_connect_req.handle, &buf, buf_count,
                        [](uv_write_t *req, int status)
                        {
-                           TCPClient::get_instance()->on_write(req, status);
+                           TCPClient::GetInstance()->OnWrite(req, status);
                        });
     
     if(ret == 0) {
@@ -94,4 +108,34 @@ void TCPClient::write(string message){
 
 TCPClient::~TCPClient(){
     uv_loop_close(m_loop);
+}
+
+void TCPClient::SetPort(int port)
+{
+    m_port = port;
+}
+
+int TCPClient::GetPort()
+{
+    return m_port;
+}
+
+void TCPClient::SetIp(const char* ip)
+{
+    m_ip = ip;
+}
+
+const char* TCPClient::GetIp()
+{
+    return m_ip;
+}
+
+void TCPClient::SetLoop(uv_loop_t* loop)
+{
+    m_loop = loop;
+}
+
+uv_loop_t* TCPClient::GetLoop()
+{
+    return m_loop;
 }

@@ -1,4 +1,3 @@
------------------------------------------------------------------------------
 -- JSON4Lua: JSON encoding / decoding support for the Lua language.
 -- json Module.
 -- Author: Craig Mason-Jones
@@ -41,7 +40,7 @@ local base = _G
 -----------------------------------------------------------------------------
 -- Module declaration
 -----------------------------------------------------------------------------
---module("json")
+module("json")
 
 -- Public functions
 
@@ -57,7 +56,6 @@ local encodeString
 local isArray
 local isEncodable
 
-json = {}
 -----------------------------------------------------------------------------
 -- PUBLIC FUNCTIONS
 -----------------------------------------------------------------------------
@@ -393,7 +391,7 @@ do
 					--start = pos
 				end -- jump over escaped chars, no matter what
 			until t == true
-			return (base.load("return " .. js_string:sub(start-1, pos-1) ) ())
+			return (base.loadstring("return " .. js_string:sub(start-1, pos-1) ) ())
 
 			-- We consider the situation where no escaped chars were encountered separately,
 			-- and use the fastest possible return in this case.
@@ -531,5 +529,6 @@ do
 	end
 end
 
+json = {}
 json.encode = encode
 json.decode = decode

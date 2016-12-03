@@ -16,8 +16,8 @@
 
 int main() {
     uv_loop_t *loop = uv_default_loop();
-    TCPBaseServer *server = TCPBaseServer::get_instance();
-    server->init(loop, "0.0.0.0", LOCAL_SERVER_PORT);
+    TCPBaseServer *server = TCPBaseServer::GetInstance();
+    server->Init(loop, "0.0.0.0", LOCAL_SERVER_PORT);
     
     return uv_run(loop, UV_RUN_DEFAULT);
 }

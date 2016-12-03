@@ -15,17 +15,17 @@ GameLogicServer::GameLogicServer()
 
 GameLogicServer::~GameLogicServer()
 {
-
+    
     cout << "Server Terminated" << endl;
 }
 
-GameLogicServer* GameLogicServer::get_instance()
+GameLogicServer* GameLogicServer::GetInstance()
 {
     static GameLogicServer server;
     return &server;
 }
 
-int GameLogicServer::init(uv_loop_t* loop, const char* ip, int port)
+int GameLogicServer::Init(uv_loop_t* loop, const char* ip, int port)
 {
     SetIp(ip);
     SetPort(port);
@@ -40,12 +40,12 @@ int GameLogicServer::init(uv_loop_t* loop, const char* ip, int port)
     int r = uv_listen((uv_stream_t*) &m_server, GetDefaultBackLog(),
                       [](uv_stream_t* server, int status)
                       {
-                          GameLogicServer::get_instance()->on_new_connection(server, status);
+                          GameLogicServer::GetInstance()->OnNewConnection(server, status);
                       });
     
     if (r) {
-        fprintf(stderr, "Listen error %s\n", uv_strerror(r));
-        return 0;
+        fprintf(stderr, "Listen error %s: %s:%d\n", uv_strerror(r), ip, port);
+        exit(1);
     }
     
     cout << "logic server listen: " << ip << ":" << port << endl;
@@ -58,12 +58,13 @@ void GameLogicServer::test_throughput(uint64_t repeat)
             <<", avg:" << totol_request/repeat << endl;
 }
 
-void GameLogicServer::on_msg_recv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf)
+void GameLogicServer::OnMsgRecv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf)
 {
     
     if (nread == UV_EOF)
     {
         cout << "Client Disconnected" << endl;
+        //to do: remove client handler
     }
     else if (nread > 0)
     {
@@ -85,7 +86,7 @@ void GameLogicServer::on_msg_recv(uv_stream_t* client, ssize_t nread, const uv_b
 
 }
 
-void GameLogicServer::on_new_connection(uv_stream_t *server, int status)
+void GameLogicServer::OnNewConnection(uv_stream_t *server, int status)
 {
     if (status < 0) {
         fprintf(stderr, "New connection error %s\n", uv_strerror(status));
@@ -101,11 +102,11 @@ void GameLogicServer::on_new_connection(uv_stream_t *server, int status)
         uv_read_start((uv_stream_t*)new_session.connection.get(),
                       [](uv_handle_t* stream, size_t nread, uv_buf_t *buf)
                       {
-                          GameLogicServer::get_instance()->alloc_buffer(stream, nread, buf);
+                          GameLogicServer::GetInstance()->AllocBuffer(stream, nread, buf);
                       },
                       [](uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf)
                       {
-                          GameLogicServer::get_instance()->on_msg_recv(stream, nread, buf);
+                          GameLogicServer::GetInstance()->OnMsgRecv(stream, nread, buf);
                       });
         
         uv_stream_t* key = (uv_stream_t*)new_session.connection.get();
@@ -129,13 +130,13 @@ void GameLogicServer::write(uv_stream_t* client, string message){
     uv_write(&m_write_req, client, &buf, 1,
              [](uv_write_t *req, int status)
              {
-                 GameLogicServer::get_instance()->on_write(req, status);
+                 GameLogicServer::GetInstance()->OnWrite(req, status);
              });
 }
 
-void GameLogicServer::on_write(uv_write_t *req, int status){
+void GameLogicServer::OnWrite(uv_write_t *req, int status){
     if(status == 0)
     {
-        //cout << "on_write" << endl;
+        //cout << "OnWrite" << endl;
     }
 }

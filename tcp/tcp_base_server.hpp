@@ -33,17 +33,17 @@ public:
     
     TCPBaseServer(const TCPBaseServer& TCPBaseServer);
     
-    static TCPBaseServer* get_instance();
+    static TCPBaseServer* GetInstance();
     
     virtual int GetDefaultBackLog();
     
-    virtual int init(uv_loop_t* loop, const char* ip, int port);
+    virtual int Init(uv_loop_t* loop, const char* ip, int port);
     
-    virtual void on_new_connection(uv_stream_t *server, int status);
+    virtual void OnNewConnection(uv_stream_t *server, int status);
     
-    virtual void on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
+    virtual void OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
     
-    virtual void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
+    virtual void AllocBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
     
     virtual void SetPort(int port);
     
@@ -56,6 +56,14 @@ public:
     virtual void SetLoop(uv_loop_t* loop);
     
     virtual uv_loop_t* GetLoop();
+    
+    virtual void SetTcpServerHandler(uv_tcp_t server);
+    
+    virtual uv_tcp_t GetTcpServerHandler();
+    
+    virtual void SetSockAddrIn(sockaddr_in sockaddr_in_struct);
+    
+    virtual sockaddr_in GetSockAddrIn();
     
 protected:
     

@@ -39,8 +39,8 @@ int main() {
     int port = server_config["port"].GetInt();
     
     uv_loop_t *loop = uv_default_loop();
-    GameLogicServer *server = GameLogicServer::get_instance();
-    server->init(loop, sz_ip.c_str(), port);
+    GameLogicServer *server = GameLogicServer::GetInstance();
+    server->Init(loop, sz_ip.c_str(), port);
     
     return uv_run(loop, UV_RUN_DEFAULT);
 }

@@ -36,16 +36,17 @@ public:
     
     GatewayServer(const GatewayServer& GatewayServer);
     
-    static GatewayServer* get_instance();
+    static GatewayServer* GetInstance();
     
     //初始化
-    int init(uv_loop_t* loop, const char* ip, int port);
+    int Init(uv_loop_t* loop, const char* ip, int port);
     
     //监听新建连接
-    void on_new_connection(uv_stream_t *server, int status);
+    void OnNewConnection(uv_stream_t *server, int status);
     
     //监听接收数据
-    void on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
+    void OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
+    
     
 protected:
     

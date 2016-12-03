@@ -107,6 +107,10 @@ namespace RedisWrap {
             return is_ok;
         }
         
+        if (IsReplyNull(*r)){
+            goto IS_OK;
+        }
+        
         switch (cmd_type) {
                 
             case CmdType::SET:
@@ -140,6 +144,7 @@ namespace RedisWrap {
                 break;
         }
         
+    IS_OK:
         is_ok = true;
         
         return is_ok;

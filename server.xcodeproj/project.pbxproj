@@ -28,7 +28,6 @@
 		B6091DB01DAD147300ABF7D0 /* tcp_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091CCE1DABD1C000ABF7D0 /* tcp_client.cpp */; };
 		B6091DBB1DAD14A100ABF7D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091DBA1DAD14A100ABF7D0 /* main.cpp */; };
 		B628D5811DEE734E00D4C87C /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
-		B628D59F1DEEBB8E00D4C87C /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
 		B62BF7821DE81A740080C6A2 /* file_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF77F1DE81A0F0080C6A2 /* file_util.cpp */; };
 		B62BF7831DE81A740080C6A2 /* file_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF77F1DE81A0F0080C6A2 /* file_util.cpp */; };
 		B62BF7841DE81A750080C6A2 /* file_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62BF77F1DE81A0F0080C6A2 /* file_util.cpp */; };
@@ -91,6 +90,8 @@
 		B667A8BC1DEED7D100E1B497 /* lua_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */; };
 		B667A8BD1DEED7D400E1B497 /* lua_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */; };
 		B667A8BE1DEED7D400E1B497 /* lua_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */; };
+		B6BC01A11DEFC775006BE204 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B62BF8131DE982730080C6A2 /* liblua.a */; };
+		B6BC01A21DEFC775006BE204 /* libtolua++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B667A8AE1DEED3FA00E1B497 /* libtolua++.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -199,7 +200,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B628D59F1DEEBB8E00D4C87C /* liblua.a in Frameworks */,
+				B6BC01A11DEFC775006BE204 /* liblua.a in Frameworks */,
+				B6BC01A21DEFC775006BE204 /* libtolua++.a in Frameworks */,
 				B62BF81F1DE983230080C6A2 /* libhiredis.a in Frameworks */,
 				B62BF8211DE983230080C6A2 /* libmysqlclient.18.dylib in Frameworks */,
 				B62BF8221DE983230080C6A2 /* libmysqlclient.a in Frameworks */,
@@ -710,12 +712,7 @@
 					"$(SRCROOT)/third_party/hiredis/",
 					"$(SRCROOT)/third_party/tolua++/",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/lib",
-					"$(PROJECT_DIR)/lib",
-					"$(PROJECT_DIR)/third_party/lib",
-					"$(PROJECT_DIR)/third_party/tolua++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/third_party/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -732,12 +729,7 @@
 					"$(SRCROOT)/third_party/hiredis/",
 					"$(SRCROOT)/third_party/tolua++/",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/lib",
-					"$(PROJECT_DIR)/lib",
-					"$(PROJECT_DIR)/third_party/lib",
-					"$(PROJECT_DIR)/third_party/tolua++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/third_party/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

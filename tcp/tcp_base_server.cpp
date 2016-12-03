@@ -19,18 +19,18 @@ TCPBaseServer::~TCPBaseServer()
     cout << "TCP Server Terminated" << endl;
 }
 
-TCPBaseServer* TCPBaseServer::get_instance()
+TCPBaseServer* TCPBaseServer::GetInstance()
 {
     static TCPBaseServer server;
     return &server;
 }
 
-void TCPBaseServer::alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf) {
+void TCPBaseServer::AllocBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf) {
     buf->base = (char*) malloc(suggested_size);
     buf->len = suggested_size;
 }
 
-int TCPBaseServer::init(uv_loop_t* loop, const char* ip, int port)
+int TCPBaseServer::Init(uv_loop_t* loop, const char* ip, int port)
 {
     SetIp(ip);
     SetPort(port);
@@ -45,19 +45,19 @@ int TCPBaseServer::init(uv_loop_t* loop, const char* ip, int port)
     int r = uv_listen((uv_stream_t*) &m_server, GetDefaultBackLog(),
                       [](uv_stream_t* server, int status)
                       {
-                          TCPBaseServer::get_instance()->on_new_connection(server, status);
+                          TCPBaseServer::GetInstance()->OnNewConnection(server, status);
                       });
     
     if (r) {
-        fprintf(stderr, "Listen error %s\n", uv_strerror(r));
-        return 0;
+        fprintf(stderr, "Listen error %s: %s:%d\n", uv_strerror(r), ip, port);
+        exit(1);
     }
     
     cout << "server listen: " << ip << ":" << port << endl;
     return 1;
 }
 
-void TCPBaseServer::on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf) {
+void TCPBaseServer::OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf) {
     auto connection_pos = open_sessions.find(client);
     if (connection_pos != open_sessions.end())
     {
@@ -75,7 +75,7 @@ void TCPBaseServer::on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf
     }
 }
 
-void TCPBaseServer::on_new_connection(uv_stream_t *server, int status)
+void TCPBaseServer::OnNewConnection(uv_stream_t *server, int status)
 {
     if (status < 0) {
         fprintf(stderr, "New connection error %s\n", uv_strerror(status));
@@ -91,11 +91,11 @@ void TCPBaseServer::on_new_connection(uv_stream_t *server, int status)
         uv_read_start((uv_stream_t*)new_session.connection.get(),
                       [](uv_handle_t* stream, size_t nread, uv_buf_t *buf)
                       {
-                          TCPBaseServer::get_instance()->alloc_buffer(stream, nread, buf);
+                          TCPBaseServer::GetInstance()->AllocBuffer(stream, nread, buf);
                       },
                       [](uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf)
                       {
-                          TCPBaseServer::get_instance()->on_msg_recv(stream, nread, buf);
+                          TCPBaseServer::GetInstance()->OnMsgRecv(stream, nread, buf);
                       });
         
         uv_stream_t* key = (uv_stream_t*)new_session.connection.get();
@@ -140,4 +140,24 @@ void TCPBaseServer::SetLoop(uv_loop_t* loop)
 uv_loop_t* TCPBaseServer::GetLoop()
 {
     return m_loop;
+}
+
+void TCPBaseServer::SetTcpServerHandler(uv_tcp_t server)
+{
+    m_server = server;
+}
+
+uv_tcp_t TCPBaseServer::GetTcpServerHandler()
+{
+    return m_server;
+}
+
+void TCPBaseServer::SetSockAddrIn(sockaddr_in sockaddr_in_struct)
+{
+    m_addr = sockaddr_in_struct;
+}
+
+sockaddr_in TCPBaseServer::GetSockAddrIn()
+{
+    return m_addr;
 }

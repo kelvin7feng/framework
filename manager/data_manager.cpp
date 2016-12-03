@@ -84,16 +84,21 @@ bool DataManager::IsUserCreated(unsigned int user_id)
     
     redisReply r;
     int is_ok = _redis_client.HGet("account", user_id, r);
-    if(_redis_client.IsQuerySucceed(is_ok))
+    if(!_redis_client.IsQuerySucceed(is_ok))
     {
-        if(!_redis_client.IsReplyNull(r)){
-            Statement statement(_mysql_client, "select * from player_account where id = ?");
-            statement << Nullable<unsigned int>(user_id) << execute;
-            if(!statement.Eof())
-            {
-                is_created = true;
-            }
-        }
+        return is_created;
+    }
+    
+    if(!_redis_client.IsReplyNull(r)){
+        is_created = true;
+        return is_created;
+    }
+    
+    Statement statement(_mysql_client, "select * from player_account where id = ?");
+    statement << Nullable<unsigned int>(user_id) << execute;
+    if(!statement.Eof())
+    {
+        is_created = true;
     }
     
     return is_created;

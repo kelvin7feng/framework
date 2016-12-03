@@ -39,16 +39,16 @@ int main() {
     int gateway_port = server_config["port"].GetInt();
     
     uv_loop_t *loop = uv_default_loop();
-    GatewayServer *server = GatewayServer::get_instance();
-    server->init(loop, gateway_ip.c_str(), gateway_port);
+    GatewayServer *server = GatewayServer::GetInstance();
+    server->Init(loop, gateway_ip.c_str(), gateway_port);
     
     //连接逻辑服
     const Value& game_logic_config = json_doc["game_logic"];
     string game_loic_ip = game_logic_config["ip"].GetString();
     int game_logic_port = game_logic_config["port"].GetInt();
     
-    TCPClient* client = TCPClient::get_instance();
-    client->init(loop, game_loic_ip.c_str(), game_logic_port);
+    TCPClient* client = TCPClient::GetInstance();
+    client->Init(loop, game_loic_ip.c_str(), game_logic_port);
     
     return uv_run(loop, UV_RUN_DEFAULT);
 }

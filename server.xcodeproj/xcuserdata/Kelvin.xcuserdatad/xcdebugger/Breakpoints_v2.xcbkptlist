@@ -6,48 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "tcp/gateway_server.cpp"
-            timestampString = "501840070.067272"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "GatewayServer::on_msg_recv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "tcp/game_logic_server.cpp"
-            timestampString = "501839551.069497"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "GameLogicServer::on_msg_recv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "tcp/gateway_server.cpp"
-            timestampString = "501842689.04878"
+            filePath = "manager/data_manager.cpp"
+            timestampString = "502254965.63435"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "85"
             endingLineNumber = "85"
-            landmarkName = "GatewayServer::on_new_connection(uv_stream_t *server, int status)"
+            landmarkName = "DataManager::IsUserCreated(unsigned int user_id)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
