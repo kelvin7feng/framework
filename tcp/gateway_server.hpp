@@ -47,11 +47,6 @@ public:
     //监听接收数据
     void OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
     
-    
-protected:
-    
-    session_map_t open_sessions;
-    
 };
 
 #endif /* gateway_server_hpp */

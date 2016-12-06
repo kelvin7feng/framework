@@ -31,13 +31,15 @@ int GameLogicServer::Init(uv_loop_t* loop, const char* ip, int port)
     SetPort(port);
     SetLoop(loop);
     
-    uv_tcp_init(loop, &m_server);
+    uv_tcp_t& server = GetTcpServerHandler();
+    uv_tcp_init(loop, &server);
     
-    uv_ip4_addr(ip, port, &m_addr);
+    sockaddr_in& addr = GetSockAddrIn();
+    uv_ip4_addr(ip, port, &addr);
     
-    uv_tcp_bind(&m_server, (const struct sockaddr*)&m_addr, 0);
+    uv_tcp_bind(&server, (const struct sockaddr*)&addr, 0);
     
-    int r = uv_listen((uv_stream_t*) &m_server, GetDefaultBackLog(),
+    int r = uv_listen((uv_stream_t*) &server, GetDefaultBackLog(),
                       [](uv_stream_t* server, int status)
                       {
                           GameLogicServer::GetInstance()->OnNewConnection(server, status);
@@ -81,7 +83,7 @@ void GameLogicServer::OnMsgRecv(uv_stream_t* client, ssize_t nread, const uv_buf
         lua_engine.CallLua(request);
     }
     
-    write(client, buf->base);
+    Write(client, buf->base);
     free(buf->base);
 
 }
@@ -110,6 +112,8 @@ void GameLogicServer::OnNewConnection(uv_stream_t *server, int status)
                       });
         
         uv_stream_t* key = (uv_stream_t*)new_session.connection.get();
+        
+        session_map_t& open_sessions = GetSessionMap();
         open_sessions.insert({key, new_session});
         
     }
@@ -118,7 +122,7 @@ void GameLogicServer::OnNewConnection(uv_stream_t *server, int status)
     }
 }
 
-void GameLogicServer::write(uv_stream_t* client, string message){
+void GameLogicServer::Write(uv_stream_t* client, string message){
     int len = (int)message.length();
     
     char buffer[100];

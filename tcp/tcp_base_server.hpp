@@ -59,21 +59,13 @@ public:
     
     virtual void SetTcpServerHandler(uv_tcp_t server);
     
-    virtual uv_tcp_t GetTcpServerHandler();
+    virtual uv_tcp_t& GetTcpServerHandler();
     
     virtual void SetSockAddrIn(sockaddr_in sockaddr_in_struct);
     
-    virtual sockaddr_in GetSockAddrIn();
+    virtual sockaddr_in& GetSockAddrIn();
     
-protected:
-    
-    uv_loop_t *m_loop;
-    
-    uv_tcp_t m_server;
-    
-    struct sockaddr_in m_addr;
-    
-    session_map_t open_sessions;
+    virtual session_map_t& GetSessionMap();
     
 private:
     
@@ -81,7 +73,15 @@ private:
     
     const char *m_ip;
     
-    int default_backlog = 1000;
+    int m_default_backlog;
+    
+    uv_tcp_t m_server;
+    
+    struct sockaddr_in m_addr;
+    
+    session_map_t open_sessions;
+    
+    uv_loop_t *m_loop;
 };
 
 #endif /* tcp_base_server_hpp */

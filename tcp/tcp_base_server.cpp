@@ -10,7 +10,10 @@
 
 TCPBaseServer::TCPBaseServer()
 {
+    m_port = 0;
     
+    m_default_backlog = 1000;
+
 }
 
 TCPBaseServer::~TCPBaseServer()
@@ -109,7 +112,7 @@ void TCPBaseServer::OnNewConnection(uv_stream_t *server, int status)
 
 int TCPBaseServer::GetDefaultBackLog()
 {
-    return default_backlog;
+    return m_default_backlog;
 }
 
 void TCPBaseServer::SetPort(int port)
@@ -147,7 +150,7 @@ void TCPBaseServer::SetTcpServerHandler(uv_tcp_t server)
     m_server = server;
 }
 
-uv_tcp_t TCPBaseServer::GetTcpServerHandler()
+uv_tcp_t& TCPBaseServer::GetTcpServerHandler()
 {
     return m_server;
 }
@@ -157,7 +160,12 @@ void TCPBaseServer::SetSockAddrIn(sockaddr_in sockaddr_in_struct)
     m_addr = sockaddr_in_struct;
 }
 
-sockaddr_in TCPBaseServer::GetSockAddrIn()
+sockaddr_in& TCPBaseServer::GetSockAddrIn()
 {
     return m_addr;
+}
+
+session_map_t& TCPBaseServer::GetSessionMap()
+{
+    return open_sessions;
 }

@@ -52,7 +52,7 @@ public:
     void OnMsgRecv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf);
     
     //回写数据
-    void write(uv_stream_t* client, string msg);
+    void Write(uv_stream_t* client, string msg);
     
     //回写数据的回调
     void OnWrite(uv_write_t* req, int status);
@@ -63,8 +63,6 @@ public:
     uv_write_t m_write_req;
     
 private:
-    
-    session_map_t open_sessions;
     
     LuaEngine lua_engine;
     

@@ -10,7 +10,7 @@
 
 TCPClient::TCPClient()
 {
-    
+    m_port = 0;
 }
 
 TCPClient* TCPClient::GetInstance()
@@ -77,7 +77,7 @@ void TCPClient::OnConnect(uv_connect_t *req, int status) {
  
 }
 
-void TCPClient::write(string message){
+void TCPClient::Write(string message){
     int len = (int)message.length();
     cout << "write: " << message.c_str() << endl;
     
