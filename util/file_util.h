@@ -20,4 +20,5 @@ public:
 	bool ReadFile(const char* file_name, std::string& str);
 };
 
+extern FileUtil* g_pFileUtil;
 #endif /* file_util_h */

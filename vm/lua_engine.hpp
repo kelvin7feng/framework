@@ -38,6 +38,7 @@ public:
     lua_State* GetLuaState();
     int InitState(int server_type);
     int CallLua(const std::string& request);
+    int RedisCallLua(const std::string& request);
     
 private:
     void stackDump(lua_State* L);

@@ -43,7 +43,7 @@ public:
     static GameLogicServer* GetInstance();
     
     //初始化
-    int Init(uv_loop_t* loop, const char* ip, int port);
+    int Init(uv_loop_t* loop);
     
     //监听新连接
     void OnNewConnection(uv_stream_t *server, int status);
@@ -57,10 +57,15 @@ public:
     //回写数据的回调
     void OnWrite(uv_write_t* req, int status);
     
+    //数据处理的回调
+    void OnDBResponse(KRESOOND_COMMON* pCommonResponse);
+    
     //测试吞吐量
     void test_throughput(uint64_t repeat);
     
     uv_write_t m_write_req;
+    
+    uv_timer_t m_db_timer_req;
     
 private:
     

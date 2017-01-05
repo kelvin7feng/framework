@@ -6,7 +6,16 @@
 //  Copyright © 2016年 kelvin. All rights reserved.
 //
 
+#include "document.h"
+#include "file_util.h"
+#include "db_client_manager.hpp"
 #include "game_logic_server.hpp"
+
+using namespace rapidjson;
+
+static void OnUVTimer(uv_timer_t *handle) {
+    g_pDBClientMgr->Activate();
+}
 
 GameLogicServer::GameLogicServer()
 {
@@ -25,8 +34,24 @@ GameLogicServer* GameLogicServer::GetInstance()
     return &server;
 }
 
-int GameLogicServer::Init(uv_loop_t* loop, const char* ip, int port)
+int GameLogicServer::Init(uv_loop_t* loop)
 {
+    string sz_config;
+    bool is_ok = g_pFileUtil->ReadFile("config.json", sz_config);
+    if(!is_ok)
+    {
+        cout << "read config failed." << endl;
+        return 0;
+    }
+    
+    Document json_doc;
+    json_doc.Parse(sz_config.c_str());
+    
+    const Value& server_config = json_doc["listen"];
+    string sz_ip = server_config["ip"].GetString();
+    int port = server_config["port"].GetInt();
+    const char* ip = sz_ip.c_str();
+    
     SetIp(ip);
     SetPort(port);
     SetLoop(loop);
@@ -51,6 +76,11 @@ int GameLogicServer::Init(uv_loop_t* loop, const char* ip, int port)
     }
     
     cout << "logic server listen: " << ip << ":" << port << endl;
+    
+    //数据管理定时器
+    uv_timer_init(loop, &m_db_timer_req);
+    uv_timer_start(&m_db_timer_req, OnUVTimer, 0, 100);
+    
     return 1;
 }
 
@@ -143,4 +173,13 @@ void GameLogicServer::OnWrite(uv_write_t *req, int status){
     {
         //cout << "OnWrite" << endl;
     }
+}
+
+void GameLogicServer::OnDBResponse(KRESOOND_COMMON* pCommonResponse)
+{
+    //调用lua处理回调
+    int nDataLen = pCommonResponse->nDataLen;
+    char* szData = new char[nDataLen];
+    memcpy(szData, pCommonResponse->data, (size_t)nDataLen);
+    lua_engine.RedisCallLua(szData);
 }

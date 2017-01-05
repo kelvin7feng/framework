@@ -7,6 +7,8 @@
 
 using namespace std;
 
+FileUtil* g_pFileUtil = NULL;
+
 FileUtil::FileUtil()
 {
 

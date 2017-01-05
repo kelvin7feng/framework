@@ -69,8 +69,48 @@ void LuaEngine::stackDump(lua_State* L){
 //调用脚本处理
 int LuaEngine::CallLua(const std::string& request)
 {
+    //清空虚拟栈
     lua_settop(m_lua_state, 0);
-    lua_getglobal(m_lua_state, "ClientRequest");
+    
+    //把OnClientRequest函数push到栈里
+    lua_getglobal(m_lua_state, "OnClientRequest");
+
+    //把请求的参数push到栈里
+    lua_pushstring(m_lua_state, request.c_str());
+    
+    //函数调用参数：虚拟机句柄,函数参数个数,函数返回值个数,调用错误码
+    int ret = lua_pcall(m_lua_state, 1, 1, 0);
+    
+    //调用出错
+    if(ret)
+    {
+        const char *pErrorMsg = lua_tostring(m_lua_state, -1);
+        cout << pErrorMsg << endl;
+        return 0;
+    }
+    
+    //取值输出
+    if (lua_isnumber(m_lua_state, -1))
+    {
+        int fValue = lua_tonumber(m_lua_state, -1);
+        if(fValue){
+            //成功逻辑
+        }
+    } else {
+        //返回值类型错误
+    }
+    
+    lua_settop(m_lua_state, 0);
+    
+    return 0;
+}
+
+
+//调用脚本处理
+int LuaEngine::RedisCallLua(const std::string& request)
+{
+    lua_settop(m_lua_state, 0);
+    lua_getglobal(m_lua_state, "OnRedisRespone");
     lua_pushstring(m_lua_state, request.c_str());
     
     int ret = lua_pcall(m_lua_state, 1, 1, 0);

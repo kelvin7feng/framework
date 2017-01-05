@@ -12,35 +12,23 @@
 #include <string.h>
 #include <uv.h>
 
-#include "document.h"
 #include "file_util.h"
+#include "db_client_manager.hpp"
 #include "game_logic_server.hpp"
-
-using namespace std;
-using namespace rapidjson;
 
 int main() {
     
-    string sz_config;
-    FileUtil* file_util = FileUtil::GetInstance();
-    bool is_ok = file_util->ReadFile("game_logic.json", sz_config);
-    if(!is_ok)
-    {
-        cout << "read config failed." << endl;
-        exit(1);
-    }
-    
-    Document json_doc;
-    json_doc.Parse(sz_config.c_str());
-    
-    const Value& server_config = json_doc["listen"];
-    
-    string sz_ip = server_config["ip"].GetString();
-    int port = server_config["port"].GetInt();
+    g_pFileUtil = new FileUtil;
+    g_pDBClientMgr = new KDBClientMgr;
     
     uv_loop_t *loop = uv_default_loop();
     GameLogicServer *server = GameLogicServer::GetInstance();
-    server->Init(loop, sz_ip.c_str(), port);
+    server->Init(loop);
+    
+    string szTbName = "account";
+    string szKey = "key";
+    IKG_Buffer* pGetBuffer = DB_CreateGetBuffer(szTbName, szKey);
+    g_pDBClientMgr->PushRedisRequest(1, pGetBuffer);
     
     return uv_run(loop, UV_RUN_DEFAULT);
 }

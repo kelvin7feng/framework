@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "manager/data_manager.cpp"
-            timestampString = "502254965.63435"
+            filePath = "db_proxy/redis_client.cpp"
+            timestampString = "505298678.363051"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "DataManager::IsUserCreated(unsigned int user_id)"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
+            landmarkName = "KRedisClient::OnResponsed(IKG_Buffer* pBuffer)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
