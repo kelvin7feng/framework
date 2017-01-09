@@ -6,6 +6,8 @@
 //  Copyright © 2016年 kelvin. All rights reserved.
 //
 
+#include <exception>
+
 #include "document.h"
 #include "file_util.h"
 #include "db_client_manager.hpp"
@@ -97,20 +99,12 @@ void GameLogicServer::OnMsgRecv(uv_stream_t* client, ssize_t nread, const uv_buf
     {
         cout << "Client Disconnected" << endl;
         //to do: remove client handler
+        //uv_close((uv_handle_t*)client, NULL);
     }
     else if (nread > 0)
     {
         std::string str = buf->base;
-        Message msg;
-        
-        //to do:解析失败,则不处理
-        msg.ParseFromString(str);
-        
-        //int server_id = msg.server_id();
-        //int user_id = msg.player_id();
-        string request = msg.pdata();
-        
-        lua_engine.CallLua(request);
+        _ProcessNetData(buf->base, nread);
     }
     
     Write(client, buf->base);
@@ -181,5 +175,45 @@ void GameLogicServer::OnDBResponse(KRESOOND_COMMON* pCommonResponse)
     int nDataLen = pCommonResponse->nDataLen;
     char* szData = new char[nDataLen];
     memcpy(szData, pCommonResponse->data, (size_t)nDataLen);
-    lua_engine.RedisCallLua(szData);
+    lua_engine.RedisCallLua(pCommonResponse->uUserId, pCommonResponse->uEventType, szData);
+}
+
+bool GameLogicServer::_ProcessNetData(const char* pData, size_t uRead)
+{
+    bool bResult = false;
+    unsigned int uWrite = 0;
+    if(!(pData && uRead > 0))
+        goto Exit0;
+    do
+    {
+        _ASSERT(m_pRecvPacket);
+        if(!(m_pRecvPacket->Write(pData, (unsigned int)uRead, &uWrite)))
+            goto Exit0;
+        if (m_pRecvPacket->IsValid())
+        {
+            IKG_Buffer* pBuffer = NULL;
+            bool bRet = m_pRecvPacket->GetData(&pBuffer);
+            if(!(bRet && pBuffer))
+                goto Exit0;
+            
+            Message msg;
+            if(msg.ParseFromArray(pBuffer->GetData(), pBuffer->GetSize()))
+            {
+                unsigned int uEventType = msg.event_type();
+                string szParam = msg.data();
+                
+                lua_engine.CallLua(uEventType, szParam);
+            }
+            
+            m_pRecvPacket->Reset();
+        }
+        pData += uWrite;
+        uRead -= uWrite;
+        if (uRead > 0)
+            continue;
+        break;
+    } while (true);
+    bResult = true;
+Exit0:
+    return bResult;
 }

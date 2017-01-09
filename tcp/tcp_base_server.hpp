@@ -17,6 +17,7 @@
 #include <iostream>
 #include <map>
 
+#include "knetpacket.h"
 #include "tcp_session.hpp"
 
 using namespace std;
@@ -66,6 +67,10 @@ public:
     virtual sockaddr_in& GetSockAddrIn();
     
     virtual session_map_t& GetSessionMap();
+    
+protected:
+    
+    IKNetPacket* m_pRecvPacket;
     
 private:
     

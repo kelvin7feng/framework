@@ -25,6 +25,12 @@
 		B60182841E1D3A960086BC92 /* redis_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B60182751E1D3A730086BC92 /* redis_client.cpp */; };
 		B60182851E1D3DF70086BC92 /* db_client_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B601826E1E1D3A730086BC92 /* db_client_manager.cpp */; };
 		B60182861E1D3DF80086BC92 /* db_client_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B601826E1E1D3A730086BC92 /* db_client_manager.cpp */; };
+		B601828E1E1F6D4C0086BC92 /* lua_redis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B601828C1E1F6D4C0086BC92 /* lua_redis.cpp */; };
+		B601828F1E1F6D4C0086BC92 /* lua_redis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B601828C1E1F6D4C0086BC92 /* lua_redis.cpp */; };
+		B60182901E1F6D4C0086BC92 /* lua_redis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B601828C1E1F6D4C0086BC92 /* lua_redis.cpp */; };
+		B60182931E22221F0086BC92 /* knetpacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B60182911E22221F0086BC92 /* knetpacket.cpp */; };
+		B60182941E22221F0086BC92 /* knetpacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B60182911E22221F0086BC92 /* knetpacket.cpp */; };
+		B60182951E22221F0086BC92 /* knetpacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B60182911E22221F0086BC92 /* knetpacket.cpp */; };
 		B60788741DAE60390089A30C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091DBC1DAD15AE00ABF7D0 /* main.cpp */; };
 		B6091CC91DABD1B100ABF7D0 /* google.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = B6091CC61DABD1B100ABF7D0 /* google.pb.cc */; };
 		B6091CD21DABD1C000ABF7D0 /* gateway_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6091CCA1DABD1C000ABF7D0 /* gateway_server.cpp */; };
@@ -120,6 +126,10 @@
 		B60182741E1D3A730086BC92 /* mysql_database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mysql_database.h; path = db_proxy/mysql_database.h; sourceTree = "<group>"; };
 		B60182751E1D3A730086BC92 /* redis_client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = redis_client.cpp; path = db_proxy/redis_client.cpp; sourceTree = "<group>"; };
 		B60182761E1D3A730086BC92 /* redis_client.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = redis_client.hpp; path = db_proxy/redis_client.hpp; sourceTree = "<group>"; };
+		B601828C1E1F6D4C0086BC92 /* lua_redis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_redis.cpp; path = vm/lua_redis.cpp; sourceTree = "<group>"; };
+		B601828D1E1F6D4C0086BC92 /* lua_redis.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = lua_redis.hpp; path = vm/lua_redis.hpp; sourceTree = "<group>"; };
+		B60182911E22221F0086BC92 /* knetpacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = knetpacket.cpp; path = common/knetpacket.cpp; sourceTree = "<group>"; };
+		B60182921E22221F0086BC92 /* knetpacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = knetpacket.h; path = common/knetpacket.h; sourceTree = "<group>"; };
 		B60788711DAE5F380089A30C /* main.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.lua; path = script/main.lua; sourceTree = "<group>"; };
 		B6091CB71DABD09E00ABF7D0 /* server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = server; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6091CC61DABD1B100ABF7D0 /* google.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = google.pb.cc; path = protobuf/google.pb.cc; sourceTree = "<group>"; };
@@ -199,6 +209,8 @@
 		B60182631E1D3A410086BC92 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				B60182911E22221F0086BC92 /* knetpacket.cpp */,
+				B60182921E22221F0086BC92 /* knetpacket.h */,
 				B60182641E1D3A570086BC92 /* db_buffer.cpp */,
 				B60182651E1D3A570086BC92 /* db_buffer.h */,
 				B60182661E1D3A570086BC92 /* db_def.h */,
@@ -333,6 +345,8 @@
 			children = (
 				B667A8BA1DEED7D100E1B497 /* lua_engine.cpp */,
 				B667A8BB1DEED7D100E1B497 /* lua_engine.hpp */,
+				B601828C1E1F6D4C0086BC92 /* lua_redis.cpp */,
+				B601828D1E1F6D4C0086BC92 /* lua_redis.hpp */,
 			);
 			name = vm;
 			sourceTree = "<group>";
@@ -459,6 +473,8 @@
 				B667A8B51DEED75100E1B497 /* player.cpp in Sources */,
 				B6091CC91DABD1B100ABF7D0 /* google.pb.cc in Sources */,
 				B6091D231DABDD8E00ABF7D0 /* game_logic_server.cpp in Sources */,
+				B601828E1E1F6D4C0086BC92 /* lua_redis.cpp in Sources */,
+				B60182931E22221F0086BC92 /* knetpacket.cpp in Sources */,
 				B6091CD21DABD1C000ABF7D0 /* gateway_server.cpp in Sources */,
 				B667A8BC1DEED7D100E1B497 /* lua_engine.cpp in Sources */,
 				B6091CD31DABD1C000ABF7D0 /* tcp_base_server.cpp in Sources */,
@@ -487,7 +503,9 @@
 				B667A8B61DEED75400E1B497 /* lua_player.cpp in Sources */,
 				B62BF7831DE81A740080C6A2 /* file_util.cpp in Sources */,
 				B601827B1E1D3A7D0086BC92 /* db_buffer.cpp in Sources */,
+				B60182941E22221F0086BC92 /* knetpacket.cpp in Sources */,
 				B6091D2E1DABE00600ABF7D0 /* tcp_client.cpp in Sources */,
+				B601828F1E1F6D4C0086BC92 /* lua_redis.cpp in Sources */,
 				B667A8BD1DEED7D400E1B497 /* lua_engine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,7 +529,9 @@
 				B667A8B71DEED75500E1B497 /* lua_player.cpp in Sources */,
 				B62BF7841DE81A750080C6A2 /* file_util.cpp in Sources */,
 				B601827C1E1D3A7E0086BC92 /* db_buffer.cpp in Sources */,
+				B60182951E22221F0086BC92 /* knetpacket.cpp in Sources */,
 				B6091DB01DAD147300ABF7D0 /* tcp_client.cpp in Sources */,
+				B60182901E1F6D4C0086BC92 /* lua_redis.cpp in Sources */,
 				B667A8BE1DEED7D400E1B497 /* lua_engine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

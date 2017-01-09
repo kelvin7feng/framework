@@ -63,15 +63,15 @@ void GatewayServer::OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t
         if (nread == UV_EOF)
         {
             cout << "Client Disconnected" << endl;
+            //to do:释放内存
         }
         else if (nread > 0)
         {
-            std::string str = buf->base;
-            Message msg;
-            msg.ParseFromString(str);
-            
-            TCPClient* game_logic_server = TCPClient::GetInstance();
-            game_logic_server->Write(str);
+            if(m_pRecvPacket->CheckNetPacket(buf->base, (int)nread))
+            {
+                TCPClient* game_logic_server = TCPClient::GetInstance();
+                game_logic_server->Transfer(buf->base, nread);
+            }
         }
         
         free(buf->base);

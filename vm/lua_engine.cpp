@@ -6,9 +6,10 @@
 //  Copyright © 2016年 kelvin. All rights reserved.
 //
 
+#include "map"
 #include "lua_player.h"
 #include "lua_engine.hpp"
-#include "map"
+#include "lua_redis.hpp"
 
 using namespace std;
 
@@ -67,7 +68,7 @@ void LuaEngine::stackDump(lua_State* L){
 }
 
 //调用脚本处理
-int LuaEngine::CallLua(const std::string& request)
+int LuaEngine::CallLua(unsigned int uEventType, const std::string& szPrarm)
 {
     //清空虚拟栈
     lua_settop(m_lua_state, 0);
@@ -76,10 +77,11 @@ int LuaEngine::CallLua(const std::string& request)
     lua_getglobal(m_lua_state, "OnClientRequest");
 
     //把请求的参数push到栈里
-    lua_pushstring(m_lua_state, request.c_str());
+    lua_pushnumber(m_lua_state, uEventType);
+    lua_pushstring(m_lua_state, szPrarm.c_str());
     
     //函数调用参数：虚拟机句柄,函数参数个数,函数返回值个数,调用错误码
-    int ret = lua_pcall(m_lua_state, 1, 1, 0);
+    int ret = lua_pcall(m_lua_state, 2, 1, 0);
     
     //调用出错
     if(ret)
@@ -107,13 +109,15 @@ int LuaEngine::CallLua(const std::string& request)
 
 
 //调用脚本处理
-int LuaEngine::RedisCallLua(const std::string& request)
+int LuaEngine::RedisCallLua(const unsigned int uUserId, const unsigned int uEventType, const std::string& request)
 {
     lua_settop(m_lua_state, 0);
     lua_getglobal(m_lua_state, "OnRedisRespone");
+    lua_pushnumber(m_lua_state, uUserId);
+    lua_pushnumber(m_lua_state, uEventType);
     lua_pushstring(m_lua_state, request.c_str());
     
-    int ret = lua_pcall(m_lua_state, 1, 1, 0);
+    int ret = lua_pcall(m_lua_state, 3, 1, 0);
     
     //调用出错
     if(ret)
@@ -152,6 +156,7 @@ int LuaEngine::InitState(int server_type)
         exit(1);
     }
     
+    LuaRegisterRedis(m_lua_state);
     tolua_player_open(m_lua_state);
     string szScriptPath = server_path[server_type];
     int nStatus = luaL_dofile(m_lua_state, szScriptPath.c_str());

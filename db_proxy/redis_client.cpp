@@ -313,7 +313,7 @@ bool KRedisClient::OnRequest(IKG_Buffer* pBuffer)
 bool KRedisClient::OnResponsed(IKG_Buffer* pBuffer)
 {
     KRESOOND_COMMON* pResond = (KRESOOND_COMMON*)pBuffer->GetData();
-    std::cout << "onResponse....event type:" << pResond->nEventType << std::endl;
+    std::cout << "onResponse....event type:" << pResond->uEventType << std::endl;
     GameLogicServer* pInstance = GameLogicServer::GetInstance();
     pInstance->OnDBResponse(pResond);
     return true;
@@ -415,8 +415,6 @@ IKG_Buffer* KRedisClient::GenCommonRespond(long long lId, unsigned char byType, 
         pResond->nRetType = pReply->type;
         pResond->nParam = 0;
         pResond->nDataLen =0;
-        pResond->nUid = 100001;
-        pResond->nEventType = 1;
         pResond->nDataLen = (int)pReply->len;
         memcpy(pResond->data, pReply->str, pReply->len);
         pResond->data[pReply->len] = '\0';
@@ -442,17 +440,15 @@ bool KRedisClient::OnRequestSet(int nIndex, const KREQUEST_SET* pRequestSet)
     //同步到数据库里
     if(pReply!=NULL)
     {
-        if(pReply != NULL)
-        {
-            size_t nSize = sizeof(KREQUEST_HSET) + uSetKeyLen + uValueLen;
-            IKG_Buffer* pBuffer = DB_MemoryCreateBuffer((int)nSize);
-            KREQUEST_SET* pRequest = (KREQUEST_SET*)pBuffer->GetData();
-            memcpy(pRequest, pRequestSet, pBuffer->GetSize());
-            g_pDBClientMgr->PushMysqlRequest(nIndex + 1, pBuffer);
-        }
+        size_t nSize = sizeof(KREQUEST_HSET) + uSetKeyLen + uValueLen;
+        IKG_Buffer* pBuffer = DB_MemoryCreateBuffer((int)nSize);
+        KREQUEST_SET* pRequest = (KREQUEST_SET*)pBuffer->GetData();
+        memcpy(pRequest, pRequestSet, pBuffer->GetSize());
+        g_pDBClientMgr->PushMysqlRequest(nIndex + 1, pBuffer);
     }
     
     pCommonBuffer = GenCommonRespond(pRequestSet->lId, pRequestSet->byType, pReply);
+    DB_SetCommonHead(pCommonBuffer, pRequestSet->uUserId, pRequestSet->uEventType);
     PushRespond(pCommonBuffer);
     bResult = true;
 Exit0:
@@ -469,7 +465,8 @@ bool KRedisClient::OnRequestGet(int nIndex, const KREQUEST_GET* pRequestGet)
 {
     bool bResult = false;
     redisReply* pReply = NULL;
-    IKG_Buffer* pPackatBuffer = NULL;
+    IKG_Buffer* pPacketBuffer = NULL;
+    IKG_Buffer* pCommonBuffer = NULL;
     size_t uPrefixLen = pRequestGet->uPrefixLen;
     size_t uKeyLen = pRequestGet->uKeyLen;
     size_t uGetKeyLen = uPrefixLen + uKeyLen + REQUEST_KEY_UNDERLINED_LEN;
@@ -482,19 +479,25 @@ bool KRedisClient::OnRequestGet(int nIndex, const KREQUEST_GET* pRequestGet)
         IKG_Buffer* pBuffer = DB_MemoryCreateBuffer((int)nSize);
         KREQUEST_GET* pRequest = (KREQUEST_GET*)pBuffer->GetData();
         memcpy(pRequest, pRequestGet, pBuffer->GetSize());
-        pPackatBuffer = g_pDBClientMgr->RequestMySQLQuery(nIndex + 1, pBuffer);
-        PushRespond(pPackatBuffer);
+        pPacketBuffer = g_pDBClientMgr->RequestMySQLQuery(nIndex + 1, pBuffer);
+        DB_SetCommonHead(pPacketBuffer, pRequestGet->uUserId, pRequestGet->uEventType);
+        PushRespond(pPacketBuffer);
     }
     
-    //返回到调用处,处理调用结果
+    pCommonBuffer = GenCommonRespond(pRequestGet->lId, pRequestGet->byType, pReply);
+    DB_SetCommonHead(pCommonBuffer, pRequestGet->uUserId, pRequestGet->uEventType);
+    PushRespond(pCommonBuffer);
+    
     bResult = true;
+    
 Exit0:
     if (pReply)
     {
         freeReplyObject(pReply);
     }
     
-    SAFE_RELEASE(pPackatBuffer);
+    SAFE_RELEASE(pPacketBuffer);
+    SAFE_RELEASE(pCommonBuffer);
     return bResult;
 }
 
@@ -533,9 +536,11 @@ bool KRedisClient::OnRequestHSet(int nIndex, const KREQUEST_HSET* pRequestHSet)
         KREQUEST_HSET* pRequest = (KREQUEST_HSET*)pBuffer->GetData();
         memcpy(pRequest, pRequestHSet, pBuffer->GetSize());
         g_pDBClientMgr->PushMysqlRequest(nIndex + 1, pBuffer);
+        //更新pReply
     }
     
     pCommonBuffer = GenCommonRespond(pRequestHSet->lId, pRequestHSet->byType, pReply);
+    DB_SetCommonHead(pCommonBuffer, pRequestHSet->uUserId, pRequestHSet->uEventType);
     PushRespond(pCommonBuffer);
     bResult = true;
     
@@ -554,14 +559,23 @@ bool KRedisClient::OnRequestHGet(int nIndex, const KREQUEST_HGET* pRequestHGet)
     bool bResult = false;
     redisReply* pReply = NULL;
     IKG_Buffer* pCommonBuffer = NULL;
-    pReply = RedisCommand(nIndex, "hget %b %b", pRequestHGet->data, (size_t)pRequestHGet->uTableNameLen, pRequestHGet->data + pRequestHGet->uTableNameLen, (size_t)pRequestHGet->uHashKeyLen);
+    IKG_Buffer* pPacketBuffer = NULL;
+    size_t uTableNameLen = pRequestHGet->uTableNameLen;
+    size_t uHashKeyLen = pRequestHGet->uHashKeyLen;
+    size_t uGetKeyLen = uTableNameLen + uHashKeyLen;
+    pReply = RedisCommand(nIndex, "hget %b %b", pRequestHGet->data, uTableNameLen, pRequestHGet->data + uTableNameLen, uHashKeyLen);
+    
     if (pReply->type == REDIS_REPLY_NIL && !pRequestHGet->bAllowRedisNil)
     {
-        //to do:从数据库里读取出来
-        goto Exit1;
+        size_t nSize = sizeof(KREQUEST_HGET) + uGetKeyLen;
+        IKG_Buffer* pBuffer = DB_MemoryCreateBuffer((int)nSize);
+        KREQUEST_HGET* pRequest = (KREQUEST_HGET*)pBuffer->GetData();
+        memcpy(pRequest, pRequestHGet, pBuffer->GetSize());
+        pPacketBuffer = g_pDBClientMgr->RequestMySQLQuery(nIndex + 1, pBuffer);
+        DB_SetCommonHead(pPacketBuffer, pRequestHGet->uUserId, pRequestHGet->uEventType);
+        PushRespond(pPacketBuffer);
     }
     
-Exit1:
     pCommonBuffer = GenCommonRespond(pRequestHGet->lId, pRequestHGet->byType, pReply);
     PushRespond(pCommonBuffer);
     bResult = true;

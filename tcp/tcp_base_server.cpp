@@ -14,6 +14,7 @@ TCPBaseServer::TCPBaseServer()
     
     m_default_backlog = 1000;
 
+    m_pRecvPacket = KG_CreateCommonPackage();
 }
 
 TCPBaseServer::~TCPBaseServer()

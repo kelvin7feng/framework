@@ -69,6 +69,8 @@ public:
     
 private:
     
+    bool _ProcessNetData(const char* pData, size_t uSize);
+    
     LuaEngine lua_engine;
     
     int totol_request;

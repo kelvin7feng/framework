@@ -32,7 +32,9 @@ public:
     
     int Init(uv_loop_t* loop, const char* ip, int port);
     
-    void Write(string msg);
+    void Write(const string& msg);
+    
+    void Transfer(const char* pBuffer, ssize_t nRead);
     
     void SetPort(int port);
     

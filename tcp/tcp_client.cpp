@@ -6,6 +6,7 @@
 //  Copyright © 2016年 kelvin. All rights reserved.
 //
 
+#include "kmacros.h"
 #include "tcp_client.hpp"
 
 TCPClient::TCPClient()
@@ -44,7 +45,7 @@ int TCPClient::Init(uv_loop_t* loop, const char* ip, int port)
         cout << "client connect to " << ip << ":" << port << " succeed"<< endl;
     }
     
-    return uv_run(loop, UV_RUN_DEFAULT);
+    return ret;
 }
 
 TCPClient::TCPClient(const TCPClient& TCPClient){
@@ -77,32 +78,55 @@ void TCPClient::OnConnect(uv_connect_t *req, int status) {
  
 }
 
-void TCPClient::Write(string message){
-    int len = (int)message.length();
-    cout << "write: " << message.c_str() << endl;
+void TCPClient::Write(const string& message){
+    unsigned int uMsgSize = (unsigned int)message.length();
+    unsigned int uHeadSize = sizeof(unsigned int);
     
-    char buffer[100];
-    uv_buf_t buf = uv_buf_init(buffer, sizeof(buffer));
+    char* pvBuffer = NULL;
+    unsigned int uPacketLen = uHeadSize + uMsgSize;
+    pvBuffer = (char*)malloc(uPacketLen);
+    memset(pvBuffer, 0, uPacketLen);
     
-    buf.len = len;
-    buf.base = (char*)message.c_str();
+    memcpy(pvBuffer, &uPacketLen, uMsgSize);
+    memcpy(pvBuffer + uMsgSize, message.c_str(), uMsgSize);
     
-    int buf_count = 1;
+    uv_write_t* pWriteReq = NULL;
+    pWriteReq = new uv_write_t;
+    pWriteReq->data = pvBuffer;
     
-    if(m_write_req.error < 0)
-    {
-        cout << "m_write_req error:" << m_write_req.error << endl;
-        cout << "try to reconnect..." << endl;
+    uv_buf_t buf = uv_buf_init(pvBuffer, uPacketLen);
+    int ret = uv_write(pWriteReq, (uv_stream_t*)&m_client, &buf, 1,
+             [](uv_write_t *req, int status)
+             {
+                 TCPClient::GetInstance()->OnWrite(req, status);
+             });
+    
+    if(ret == 0) {
+        //send to server succeed
     }
+}
+
+//转发函数
+void TCPClient::Transfer(const char* pBuffer, ssize_t nRead){
     
-    int ret = uv_write(&m_write_req, m_connect_req.handle, &buf, buf_count,
+    char* pvBuffer = NULL;
+    pvBuffer = (char*)malloc(nRead);
+    memset(pvBuffer, 0, nRead);
+    memcpy(pvBuffer, pBuffer, nRead);
+    
+    uv_write_t* pWriteReq = NULL;
+    pWriteReq = new uv_write_t;
+    pWriteReq->data = pvBuffer;
+    
+    uv_buf_t buf = uv_buf_init(pvBuffer, (unsigned int)nRead);
+    int ret = uv_write(pWriteReq, (uv_stream_t*)&m_client, &buf, 1,
                        [](uv_write_t *req, int status)
                        {
                            TCPClient::GetInstance()->OnWrite(req, status);
                        });
     
-    if(ret == 0) {
-        //send to server succeed
+    if(ret != 0) {
+        SAFE_DELETE(pWriteReq);
     }
 }
 

@@ -25,10 +25,5 @@ int main() {
     GameLogicServer *server = GameLogicServer::GetInstance();
     server->Init(loop);
     
-    string szTbName = "account";
-    string szKey = "key";
-    IKG_Buffer* pGetBuffer = DB_CreateGetBuffer(szTbName, szKey);
-    g_pDBClientMgr->PushRedisRequest(1, pGetBuffer);
-    
     return uv_run(loop, UV_RUN_DEFAULT);
 }

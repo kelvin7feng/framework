@@ -36,6 +36,7 @@ private:
     
     redisReply* RedisCommand(int nIndex, const char* format, ...);
     IKG_Buffer* GenCommonRespond(long long lId, unsigned char byType, redisReply* pReply);
+    IKG_Buffer* GenCommonRespond(unsigned int uUserId, unsigned int uEventType, redisReply* pReply);
     
     bool OnRequestSet(int nIndex, const KREQUEST_SET* pRequestSet);
     bool OnRequestGet(int nIndex, const KREQUEST_GET* pRequestGet);

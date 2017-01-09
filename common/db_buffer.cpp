@@ -57,6 +57,19 @@ long KG_Buffer::Release()
     return 0;
 }
 
+void DB_SetBufferHead(IKG_Buffer* pBuffer, unsigned int uUserId, unsigned int uEventType)
+{
+    KREQUEST_HEAD* pResond = (KREQUEST_HEAD*)pBuffer->GetData();
+    pResond->uUserId = uUserId;
+    pResond->uEventType = uEventType;
+}
+
+void DB_SetCommonHead(IKG_Buffer* pBuffer, unsigned int uUserId, unsigned int uEventType)
+{
+    KRESOOND_COMMON* pResond = (KRESOOND_COMMON*)pBuffer->GetData();
+    pResond->uUserId = uUserId;
+    pResond->uEventType = uEventType;
+}
 
 IKG_Buffer* DB_MemoryCreateBuffer(unsigned int uSize)
 {
@@ -119,7 +132,7 @@ IKG_Buffer* DB_CreateGetBuffer(const std::string& szTable, const std::string& sz
 }
 
 
-IKG_Buffer* DB_CreateHsetBuffer(const std::string& szKey, const std::string& szField, const std::string& szValue)
+IKG_Buffer* DB_CreateHSetBuffer(const std::string& szKey, const std::string& szField, const std::string& szValue)
 {
     int nSize = (int)(sizeof(KREQUEST_HSET) + szKey.length() + szField.length() + szValue.length());
     IKG_Buffer* pBuffer = DB_MemoryCreateBuffer(nSize);

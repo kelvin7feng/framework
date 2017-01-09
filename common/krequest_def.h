@@ -54,8 +54,8 @@ struct KREQUEST_HEAD : KREQUEST_TYPE
     int nConnectId;
     int nDBType;
     bool bAllowRedisNil;
-    int nUid;
-    int nEventType;
+    unsigned int uUserId;
+    unsigned int uEventType;
 };
 
 struct KREQUEST_SET : KREQUEST_HEAD
@@ -176,8 +176,8 @@ struct KRESOOND_COMMON
     int nRetType;
     int nParam;
     int nDataLen;
-    int nUid;
-    int nEventType;
+    unsigned int uUserId;
+    unsigned int uEventType;
     char data[1];
 };
 
