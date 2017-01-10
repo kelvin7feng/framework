@@ -8,6 +8,7 @@
 
 #include <exception>
 
+#include "kmacros.h"
 #include "document.h"
 #include "file_util.h"
 #include "db_client_manager.hpp"
@@ -94,22 +95,50 @@ void GameLogicServer::test_throughput(uint64_t repeat)
 
 void GameLogicServer::OnMsgRecv(uv_stream_t* client, ssize_t nread, const uv_buf_t *buf)
 {
-    
-    if (nread == UV_EOF)
+    session_map_t& open_sessions = GetSessionMap();
+    auto connection_pos = open_sessions.find(client);
+    if (connection_pos != open_sessions.end())
     {
-        cout << "Client Disconnected" << endl;
-        //to do: remove client handler
-        //uv_close((uv_handle_t*)client, NULL);
+        if (nread == UV_EOF)
+        {
+            cout << "Client Disconnected" << endl;
+            RemoveClient(client);
+        }
+        else if (nread > 0)
+        {
+            _ProcessNetData(buf->base, nread);
+        }
+        
+        //string szTest = "test";
+        //SendData(client, szTest.c_str(), (unsigned int)szTest.length());
+        free(buf->base);
+        
     }
-    else if (nread > 0)
+    else
     {
-        std::string str = buf->base;
-        _ProcessNetData(buf->base, nread);
+        uv_read_stop(client);
+        cout << "Unrecognized client. Disconnecting." << endl;;
     }
-    
-    Write(client, buf->base);
-    free(buf->base);
+}
 
+void GameLogicServer::RemoveClient(uv_stream_t* client)
+{
+    session_map_t& open_sessions = GetSessionMap();
+    auto connection_pos = open_sessions.find(client);
+    if (connection_pos != open_sessions.end())
+    {
+        uv_close((uv_handle_t*)connection_pos->second.connection.get(),
+                 [] (uv_handle_t* handle)
+                 {
+                     GameLogicServer::GetInstance()->OnConnectionClose(handle);
+                 });
+    }
+}
+
+void GameLogicServer::OnConnectionClose(uv_handle_t* handle)
+{
+    session_map_t& open_sessions = GameLogicServer::GetInstance()->GetSessionMap();
+    open_sessions.erase((uv_stream_t*)handle);
 }
 
 void GameLogicServer::OnNewConnection(uv_stream_t *server, int status)
@@ -154,7 +183,7 @@ void GameLogicServer::Write(uv_stream_t* client, string message){
     
     buf.len = len;
     buf.base = (char*)message.c_str();
-
+    
     uv_write(&m_write_req, client, &buf, 1,
              [](uv_write_t *req, int status)
              {
@@ -165,7 +194,37 @@ void GameLogicServer::Write(uv_stream_t* client, string message){
 void GameLogicServer::OnWrite(uv_write_t *req, int status){
     if(status == 0)
     {
-        //cout << "OnWrite" << endl;
+        cout << "OnWrite" << endl;
+    }
+}
+
+void GameLogicServer::SendData(uv_stream_t* client, const char* pBuffer, unsigned int uSize){
+    
+    char* pvBuffer = NULL;
+    unsigned int uPacketLen = KD_PACKAGE_LEN_SIZE + uSize;
+    pvBuffer = (char*)malloc(uPacketLen);
+    memset(pvBuffer, 0, uPacketLen);
+    
+    memcpy(pvBuffer, &uPacketLen, KD_PACKAGE_LEN_SIZE);
+    memcpy(pvBuffer + KD_PACKAGE_LEN_SIZE, pBuffer, uSize);
+    
+    uv_buf_t pUvBuf = uv_buf_init(pvBuffer, uPacketLen);
+    uv_write(&m_write_req, client, &pUvBuf, 1,
+             [](uv_write_t *pReq, int nStatus)
+             {
+                 GameLogicServer::GetInstance()->OnSendData(pReq, nStatus);
+             });
+}
+
+void GameLogicServer::OnSendData(uv_write_t *pReq, int nStatus){
+    
+    if (nStatus == -1) {
+        fprintf(stderr, "error OnSendData");
+        return;
+    }
+    
+    if (nStatus == 0) {
+        cout << "send to client succeed!" << endl;
     }
 }
 
@@ -196,10 +255,12 @@ bool GameLogicServer::_ProcessNetData(const char* pData, size_t uRead)
             if(!(bRet && pBuffer))
                 goto Exit0;
             
+            void* pDataBuffer = pBuffer->GetData();
+            unsigned int uEventType = m_pRecvPacket->GetEventType(pDataBuffer);
+            unsigned int uHandlerId = *(unsigned int*)((char*)pBuffer + sizeof(unsigned int));
             Message msg;
-            if(msg.ParseFromArray(pBuffer->GetData(), pBuffer->GetSize()))
+            if(msg.ParseFromArray((char*)pDataBuffer + sizeof(unsigned int) * 2, pBuffer->GetSize()))
             {
-                unsigned int uEventType = msg.event_type();
                 string szParam = msg.data();
                 
                 lua_engine.CallLua(uEventType, szParam);

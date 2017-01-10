@@ -16,6 +16,7 @@
 #include "document.h"
 #include "file_util.h"
 #include "gateway_server.hpp"
+#include "gateway_client.hpp"
 
 using namespace std;
 using namespace rapidjson;
@@ -47,7 +48,7 @@ int main() {
     string game_loic_ip = game_logic_config["ip"].GetString();
     int game_logic_port = game_logic_config["port"].GetInt();
     
-    TCPClient* client = TCPClient::GetInstance();
+    GatewayClient* client = GatewayClient::GetInstance();
     client->Init(loop, game_loic_ip.c_str(), game_logic_port);
     
     return uv_run(loop, UV_RUN_DEFAULT);

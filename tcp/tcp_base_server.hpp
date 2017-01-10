@@ -23,6 +23,8 @@
 using namespace std;
 
 typedef std::map<uv_stream_t*, TCPSession> session_map_t;
+typedef std::map<unsigned int, uv_stream_t*> id_map_to_handler_t;
+typedef std::map<uv_stream_t*, unsigned int> handler_map_to_id_t;
 
 class TCPBaseServer{
     
@@ -68,11 +70,33 @@ public:
     
     virtual session_map_t& GetSessionMap();
     
+    unsigned int GetHandlerIdByHandler(uv_stream_t* pKey);
+    
+    virtual id_map_to_handler_t& GetIdToHandlerMap();
+    
+    virtual handler_map_to_id_t& GetHandlerToIdMap();
+    
+    virtual void AddSession(TCPSession session);
+    
+    virtual void RemoveClient(uv_stream_t* client);
+    
+    virtual void OnConnectionClose(uv_handle_t* handle);
+    
+    virtual void SendData(const char* pBuffer, unsigned int uSize);
+    
+    virtual void OnSendData(uv_write_t *pReq, int nStatus);
+    
 protected:
+    
+    virtual bool _ProcessNetData(const char* pData, size_t uSize);
     
     IKNetPacket* m_pRecvPacket;
     
+    uv_tcp_t m_server;
+    
 private:
+    
+    int m_nSessionId;
     
     int m_port;
     
@@ -80,13 +104,16 @@ private:
     
     int m_default_backlog;
     
-    uv_tcp_t m_server;
-    
     struct sockaddr_in m_addr;
     
     session_map_t open_sessions;
     
+    id_map_to_handler_t m_id_to_handler_map;
+    
+    handler_map_to_id_t m_hander_to_id_map;
+    
     uv_loop_t *m_loop;
+    
 };
 
 #endif /* tcp_base_server_hpp */

@@ -4,9 +4,6 @@
 
 #include <memory.h>
 
-#define KD_PACKAGE_LEN_SIZE sizeof(unsigned int)
-#define KD_INVALID_PACKET_LEN (unsigned int)-1
-
 using namespace google;
 
 class KNetPackage : public IKNetPacket
@@ -15,6 +12,8 @@ public:
 	KNetPackage();
 	virtual ~KNetPackage();
 	virtual bool GetData(IKG_Buffer** ppBuffer) const;
+    virtual unsigned int GetEventType(void* pBuffer) const;
+    virtual unsigned int GetHandlerId(void* pBuffer) const;
 	virtual bool Write(const char* pData, unsigned int uDataLen, unsigned int* puWrite);
 	virtual bool IsValid() const { return m_uRecvOffset == m_uPacketLen; }
 	virtual bool Reset();
@@ -60,6 +59,18 @@ bool KNetPackage::GetData(IKG_Buffer** ppBuffer) const
 	bResult = true;
 Exit0:
 	return bResult;
+}
+
+unsigned int KNetPackage::GetEventType(void *pBuffer) const
+{
+    unsigned int uEventType = *(unsigned int*)((char*)pBuffer);
+    return uEventType;
+}
+
+unsigned int KNetPackage::GetHandlerId(void *pBuffer) const
+{
+    unsigned int uHandlerId = *(unsigned int*)((char*)pBuffer + sizeof(unsigned int));
+    return uHandlerId;
 }
 
 bool KNetPackage::Write(const char* pData, unsigned int uDataLen, unsigned int* puWrite)
@@ -154,7 +165,7 @@ bool KNetPackage::CheckNetPacket(const char* pData, unsigned int uSize)
 {
     bool bResult = false;
     Message msg;
-    if(msg.ParseFromArray(pData + KD_PACKAGE_LEN_SIZE, uSize))
+    if(msg.ParseFromArray(pData + KD_PACKAGE_HEADER_SIZE, uSize))
     {
         bResult = true;
     }

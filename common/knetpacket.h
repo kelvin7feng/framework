@@ -8,6 +8,8 @@ class IKNetPacket
 public:
 	virtual ~IKNetPacket() {}
 	virtual bool GetData(IKG_Buffer** ppBuffer) const = 0;
+    virtual unsigned int GetEventType(void* pBuffer) const = 0;
+    virtual unsigned int GetHandlerId(void* pBuffer) const = 0;
 	virtual bool IsValid() const = 0;
 	virtual bool Reset() = 0;
     virtual bool CheckNetPacket(const char* pData, unsigned int uSize) = 0;
