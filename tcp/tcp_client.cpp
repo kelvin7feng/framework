@@ -69,43 +69,13 @@ void TCPClient::OnWrite(uv_write_t *req, int status){
     }
 }
 
-void TCPClient::OnConnect(uv_connect_t *pServer, int nStatus) {
+void TCPClient::OnConnect(uv_connect_t *req, int status) {
     
-    if (nStatus < 0) {
-        cout << "TCP Client connect error: " << uv_strerror(nStatus) << endl;
+    if (status < 0) {
+        cout << "TCP Client connect error: " << uv_strerror(status) << endl;
         exit(1);
     }
-    
-    if (nStatus == -1) {
-        fprintf(stderr, "error OnConnect");
-        return;
-    }
-    
-    int iret = uv_read_start(pServer->handle, AllocBuffer,
-                             [](uv_stream_t* req, ssize_t nread, const uv_buf_t *buf)
-                             {
-                                 TCPClient::GetInstance()->OnMsgRecv(req, nread, buf);
-                             });
-    
-    if(!iret)
-    {
-        //尝试重连
-    }
  
-}
-
-void TCPClient::OnMsgRecv(uv_stream_t* pServer, ssize_t nread, const uv_buf_t *buf)
-{
-    if (nread == UV_EOF)
-    {
-        cout << "Server Disconnected" << endl;
-    }
-    else if (nread > 0)
-    {
-        std::string str = buf->base;
-    }
-    
-    free(buf->base);
 }
 
 void TCPClient::Write(const string& message){
@@ -133,6 +103,30 @@ void TCPClient::Write(const string& message){
     
     if(ret == 0) {
         //send to server succeed
+    }
+}
+
+//转发函数
+void TCPClient::Transfer(const char* pBuffer, ssize_t nRead){
+    
+    char* pvBuffer = NULL;
+    pvBuffer = (char*)malloc(nRead);
+    memset(pvBuffer, 0, nRead);
+    memcpy(pvBuffer, pBuffer, nRead);
+    
+    uv_write_t* pWriteReq = NULL;
+    pWriteReq = new uv_write_t;
+    pWriteReq->data = pvBuffer;
+    
+    uv_buf_t buf = uv_buf_init(pvBuffer, (unsigned int)nRead);
+    int ret = uv_write(pWriteReq, (uv_stream_t*)&m_client, &buf, 1,
+                       [](uv_write_t *req, int status)
+                       {
+                           TCPClient::GetInstance()->OnWrite(req, status);
+                       });
+    
+    if(ret != 0) {
+        SAFE_DELETE(pWriteReq);
     }
 }
 

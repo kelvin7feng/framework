@@ -6,13 +6,10 @@
 //  Copyright © 2016年 冯文斌. All rights reserved.
 //
 
-#include "kmacros.h"
 #include "tcp_base_server.hpp"
 
 TCPBaseServer::TCPBaseServer()
 {
-    m_nSessionId = 0;
-    
     m_port = 0;
     
     m_default_backlog = 1000;
@@ -71,7 +68,6 @@ void TCPBaseServer::OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t
         if (nread == UV_EOF)
         {
             cout << "Client Disconnected" << endl;
-            RemoveClient(client);
         }
         else if (nread > 0)
         {
@@ -112,59 +108,6 @@ void TCPBaseServer::OnNewConnection(uv_stream_t *server, int status)
     }
     else {
         uv_close((uv_handle_t*)new_session.connection.get(), NULL);
-    }
-}
-
-void TCPBaseServer::RemoveClient(uv_stream_t* client)
-{
-    auto connection_pos = open_sessions.find(client);
-    if (connection_pos != open_sessions.end())
-    {
-        uv_close((uv_handle_t*)connection_pos->second.connection.get(),
-                 [] (uv_handle_t* handle)
-                 {
-                     TCPBaseServer::GetInstance()->OnConnectionClose(handle);
-                 });
-    }
-}
-
-void TCPBaseServer::OnConnectionClose(uv_handle_t* handle)
-{
-    cout << "release connection of client..." << endl;
-    open_sessions.erase((uv_stream_t*)handle);
-}
-
-void TCPBaseServer::SendData(const char* pBuffer, unsigned int uSize){
-    
-    char* pvBuffer = NULL;
-    unsigned int uPacketLen = KD_PACKAGE_LEN_SIZE + uSize;
-    pvBuffer = (char*)malloc(uPacketLen);
-    memset(pvBuffer, 0, uPacketLen);
-    
-    memcpy(pvBuffer, &uPacketLen, KD_PACKAGE_LEN_SIZE);
-    memcpy(pvBuffer + KD_PACKAGE_LEN_SIZE, pBuffer, uSize);
-    
-    uv_write_t* pWriteReq = NULL;
-    pWriteReq = new uv_write_t;
-    pWriteReq->data = pvBuffer;
-    
-    uv_buf_t pUvBuf = uv_buf_init(pvBuffer, uPacketLen);
-    uv_write(pWriteReq, (uv_stream_t*)&m_server, &pUvBuf, 1,
-             [](uv_write_t *pReq, int nStatus)
-             {
-                 TCPBaseServer::GetInstance()->OnSendData(pReq, nStatus);
-             });
-}
-
-void TCPBaseServer::OnSendData(uv_write_t *pReq, int nStatus){
-    
-    if (nStatus == -1) {
-        fprintf(stderr, "error on_write");
-        return;
-    }
-    
-    if (nStatus == 0) {
-        cout << "send to server succeed!" << endl;
     }
 }
 
@@ -226,47 +169,4 @@ sockaddr_in& TCPBaseServer::GetSockAddrIn()
 session_map_t& TCPBaseServer::GetSessionMap()
 {
     return open_sessions;
-}
-
-unsigned int TCPBaseServer::GetHandlerIdByHandler(uv_stream_t* pKey)
-{
-    unsigned int uHandlerId = 0;
-    handler_map_to_id_t& mapHandlerToId = GetHandlerToIdMap();
-    auto handlerToId = mapHandlerToId.find(pKey);
-    if(handlerToId != mapHandlerToId.end())
-    {
-        uHandlerId = handlerToId->second;
-    }
-    
-    return uHandlerId;
-}
-
-id_map_to_handler_t& TCPBaseServer::GetIdToHandlerMap()
-{
-    return m_id_to_handler_map;
-}
-
-handler_map_to_id_t& TCPBaseServer::GetHandlerToIdMap()
-{
-    return m_hander_to_id_map;
-}
-
-void TCPBaseServer::AddSession(TCPSession session)
-{
-    uv_stream_t* key = (uv_stream_t*)session.connection.get();
-    session_map_t& open_sessions = GetSessionMap();
-    open_sessions.insert({key, session});
-    m_nSessionId ++;
-    
-    id_map_to_handler_t& mapIdToHandler = GetIdToHandlerMap();
-    mapIdToHandler.insert({m_nSessionId, key});
-    
-    handler_map_to_id_t& mapHandlerToId = GetHandlerToIdMap();
-    mapHandlerToId.insert({key, m_nSessionId});
-}
-
-
-bool TCPBaseServer::_ProcessNetData(const char* pData, size_t uSize)
-{
-    return false;
 }

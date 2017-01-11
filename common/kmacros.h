@@ -20,9 +20,6 @@
 #include <unistd.h>
 #endif
 
-#define KD_PACKAGE_HEADER_SIZE sizeof(unsigned int) * 3
-#define KD_PACKAGE_LEN_SIZE sizeof(unsigned int)
-#define KD_INVALID_PACKET_LEN (unsigned int)-1
 
 #if defined(CHECK_MEMERY_LEAK) & defined(WIN32) & (defined(DEBUG) | defined(_DEBUG))
 #include <crtdbg.h>

@@ -63,27 +63,13 @@ public:
     //测试吞吐量
     void test_throughput(uint64_t repeat);
     
-    //释放客户端句柄
-    void RemoveClient(uv_stream_t* client);
-    
-    //客户端关闭后的回调
-    void OnConnectionClose(uv_handle_t* handle);
-    
-    //发送函数
-    void SendData(uv_stream_t* client, const char* pBuffer, unsigned int uSize);
-    
-    //发送函数的回调
-    void OnSendData(uv_write_t *pReq, int nStatus);
-    
     uv_write_t m_write_req;
     
     uv_timer_t m_db_timer_req;
-
-protected:
-    
-    bool _ProcessNetData(const char* pData, size_t uSize);
     
 private:
+    
+    bool _ProcessNetData(const char* pData, size_t uSize);
     
     LuaEngine lua_engine;
     

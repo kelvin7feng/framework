@@ -47,17 +47,6 @@ public:
     //监听接收数据
     void OnMsgRecv(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
     
-    //释放客户端句柄
-    void RemoveClient(uv_stream_t* client);
-    
-    //客户端关闭后的回调
-    void OnConnectionClose(uv_handle_t* handle);
-
-protected:
-    bool _ProcessNetData(const char* pData, size_t uSize);
-private:
-    //增加句柄的id到网络包里
-    void AddHanderIdToPacket(unsigned int nHandlerId, void* pBuffer, unsigned int uSize);
 };
 
 #endif /* gateway_server_hpp */
